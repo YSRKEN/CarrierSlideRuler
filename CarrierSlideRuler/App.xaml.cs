@@ -1,4 +1,5 @@
-﻿using CarrierSlideRuler.ViewModels;
+﻿using CarrierSlideRuler.Models;
+using CarrierSlideRuler.ViewModels;
 using CarrierSlideRuler.Views;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace CarrierSlideRuler {
 	public partial class App : Application {
 		protected override void OnStartup(StartupEventArgs e) {
 			base.OnStartup(e);
+			// データベースを初期化する
+			Database.Initialize();
 			// メイン画面を作成して表示する
 			var mv = new MainView();
 			var mvm = new MainViewModel();

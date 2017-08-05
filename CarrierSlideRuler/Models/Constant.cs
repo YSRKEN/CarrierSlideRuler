@@ -11,8 +11,9 @@ namespace CarrierSlideRuler.Models {
 	enum FleetType { None, CV, ACV, CVL, CA, CAV, CC, BB, BBV, AV, SSV, Other }
 	// 装備種データ
 	enum WeaponType { None, PF, PA, PB, JPB, WF, WB, PS, PSK, PSS, AS }
-	// 艦種データと文字列との対応ハッシュ
+	// その他定数
 	static class Constant {
+		// 艦種データと文字列との対応ハッシュ
 		public static FleetTypeTable fleetTypeTable = new FleetTypeTable() {
 			{"正規空母", FleetType.CV},
 			{"装甲空母", FleetType.ACV},
@@ -26,6 +27,12 @@ namespace CarrierSlideRuler.Models {
 			{"潜水空母", FleetType.SSV},
 			{"その他", FleetType.Other},
 		};
+		// 文字列を艦種データに変換
+		public static FleetType ParseFleetType(string str) {
+			if (fleetTypeTable.ContainsKey(str))
+				return fleetTypeTable[str];
+			throw new FormatException();
+		}
 		// 装備種データと文字列との対応ハッシュ
 		public static WeaponTypeTable weaponTypeTable = new WeaponTypeTable() {
 			{"艦上戦闘機", WeaponType.PF}, //Plane Fighter
@@ -39,5 +46,11 @@ namespace CarrierSlideRuler.Models {
 			{"艦上偵察機(彩雲)", WeaponType.PSS}, //Plane Searcher(Saiun)
 			{"航空要員", WeaponType.AS}, //Air Staff
 		};
+		// 文字列を 装備種データに変換
+		public static WeaponType ParseWeaponType(string str) {
+			if (weaponTypeTable.ContainsKey(str))
+				return weaponTypeTable[str];
+			throw new FormatException();
+		}
 	}
 }

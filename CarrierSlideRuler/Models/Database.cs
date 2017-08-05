@@ -14,16 +14,46 @@ namespace CarrierSlideRuler.Models {
 		public static void Initialize() {
 			kammusuDictionary = new KammusuTable();
 			using (var sr = new System.IO.StreamReader(@"kammusu.csv")) {
-			while (!sr.EndOfStream) {
-				// 1行を読み込む
-				string line = sr.ReadLine();
-				// マッチさせてから各数値を取り出す
-				//string pattern = @"(?<Number>\d+),(?<Name>[^,]+),(?<Type>\d+),(?<AntiAir>\d+),(?<SlotCount>\d+),(?<Airs1>\d+)/(?<Airs2>\d+)/(?<Airs3>\d+)/(?<Airs4>\d+)/(?<Airs5>\d+),(?<WeaponId1>(|-)\d+)/(?<WeaponId2>(|-)\d+)/(?<WeaponId3>(|-)\d+)/(?<WeaponId4>(|-)\d+)/(?<WeaponId5>(|-)\d+),(?<IsKammusu>\d)";
-				var match = Regex.Match(line, pattern);
-				if (!match.Success) {
-					continue;
+				while (!sr.EndOfStream) {
+					// 1行を読み込む
+					string line = sr.ReadLine();
+					// マッチさせてから各数値を取り出す
+					string pattern = @"(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<SlotCount>\d+),(?<Airs1>\d+),(?<Airs2>\d+),(?<Airs3>\d+),(?<Airs4>\d+),(?<HasPF>○|×),(?<HasPA>○|×),(?<HasPB>○|×),(?<HasJPB>○|×),(?<HasWF>○|×),(?<HasWB>○|×),(?<HasPS>○|×),(?<HasPSK>○|×),(?<HasAS>○|×)";
+					var match = Regex.Match(line, pattern);
+					if (!match.Success) {
+						continue;
+					}
+					// 取り出した数値をKammusuDataに変換する
+					{
+						try {
+							int id = int.Parse(match.Groups["Number"].Value);
+							string name = match.Groups["Name"].Value;
+							FleetType type = Constant.ParseFleetType(match.Groups["Type"].Value);
+							int attack = int.Parse(match.Groups["Attack"].Value);
+							int slotCount = int.Parse(match.Groups["SlotCount"].Value);
+							int airs1 = int.Parse(match.Groups["Airs1"].Value);
+							int airs2 = int.Parse(match.Groups["Airs2"].Value);
+							int airs3 = int.Parse(match.Groups["Airs3"].Value);
+							int airs4 = int.Parse(match.Groups["Airs4"].Value);
+							bool hasPF = (match.Groups["HasPF"].Value == "○");
+							bool hasPA = (match.Groups["HasPA"].Value == "○");
+							bool hasPB = (match.Groups["HasPB"].Value == "○");
+							bool hasJPB = (match.Groups["HasJPB"].Value == "○");
+							bool hasWF = (match.Groups["HasWF"].Value == "○");
+							bool hasWB = (match.Groups["HasWB"].Value == "○");
+							bool hasPS = (match.Groups["HasPS"].Value == "○");
+							bool hasPSK = (match.Groups["HasPSK"].Value == "○");
+							bool hasAS = (match.Groups["HasAS"].Value == "○");
+							var kammusu = new KammusuData(id, name, type, attack, slotCount, new int[] { airs1, airs2, airs3, airs4 },
+								hasPF, hasPA, hasPB, hasJPB, hasWF, hasWB, hasPS, hasPSK, hasAS);
+							kammusuDictionary[name] = kammusu;
+						}
+						catch {
+							continue;
+						}
+					}
 				}
-			}
+				return;
 			}
 		}
 	}
@@ -65,7 +95,7 @@ namespace CarrierSlideRuler.Models {
 			HasPSK = false;
 			HasAS = false;
 		}
-		public KammusuData(int id, string name, FleetType type, int attack, int slotCount, int[] airs, 
+		public KammusuData(int id, string name, FleetType type, int attack, int slotCount, int[] airs,
 			bool hasPF, bool hasPA, bool hasPB, bool hasJPB, bool hasWF, bool hasWB, bool hasPS, bool hasPSK, bool hasAS) {
 			Id = id;
 			Name = name;
@@ -73,15 +103,15 @@ namespace CarrierSlideRuler.Models {
 			Attack = attack;
 			SlotCount = slotCount;
 			Airs = airs;
-			HasPF  = hasPF;
-			HasPA  = hasPA;
-			HasPB  = hasPB;
+			HasPF = hasPF;
+			HasPA = hasPA;
+			HasPB = hasPB;
 			HasJPB = hasJPB;
-			HasWF  = hasWF;
-			HasWB  = hasWB;
-			HasPS  = hasPS;
+			HasWF = hasWF;
+			HasWB = hasWB;
+			HasPS = hasPS;
 			HasPSK = hasPSK;
-			HasAS  = hasAS;
+			HasAS = hasAS;
 		}
 	}
 	// 装備データの内部表現
