@@ -74,13 +74,14 @@ namespace CarrierSlideRuler.ViewModels {
 				foreach(string name in Database.KammusuNameList) {
 					KammusuNameList.Add(name);
 				}
+				int defaultSelectedIndex = KammusuNameList.Count - 1;
+				KammusuSelectedIndex1 = defaultSelectedIndex;
+				KammusuSelectedIndex2 = defaultSelectedIndex;
+				KammusuSelectedIndex3 = defaultSelectedIndex;
+				KammusuSelectedIndex4 = defaultSelectedIndex;
+				KammusuSelectedIndex5 = defaultSelectedIndex;
+				KammusuSelectedIndex6 = defaultSelectedIndex;
 			}
-			KammusuSelectedIndex1 = -1;
-			KammusuSelectedIndex2 = -1;
-			KammusuSelectedIndex3 = -1;
-			KammusuSelectedIndex4 = -1;
-			KammusuSelectedIndex5 = -1;
-			KammusuSelectedIndex6 = -1;
 		}
 	}
 }
