@@ -56,6 +56,11 @@ namespace CarrierSlideRuler.Models {
 				return;
 			}
 		}
+		public static List<string> KammusuNameList {
+			get {
+				return kammusuDictionary.Keys.ToList();
+			}
+		}
 	}
 	// 艦娘データの内部表現
 	class KammusuData {
