@@ -4,7 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:CarrierSlideRuler.Views"
-		mc:Ignorable="d" Title="CarrierSlideRuler" Height="350" Width="650">
+		mc:Ignorable="d" Title="CarrierSlideRuler" Height="350" Width="650" MaxHeight="350" MinWidth="650" ResizeMode="CanResize">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="6*" />
