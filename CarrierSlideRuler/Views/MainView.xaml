@@ -50,33 +50,33 @@
 			<ComboBox Grid.Row="5" Grid.Column="1" Margin="5,5,10,5" ItemsSource="{Binding KammusuNameList}" SelectedIndex="{Binding KammusuSelectedIndex5}" />
 			<ComboBox Grid.Row="6" Grid.Column="1" Margin="5,5,10,5" ItemsSource="{Binding KammusuNameList}" SelectedIndex="{Binding KammusuSelectedIndex6}" />
 			<!-- 装備1 -->
-			<ComboBox Grid.Row="1" Grid.Column="2" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="2" Grid.Column="2" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="3" Grid.Column="2" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="4" Grid.Column="2" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="5" Grid.Column="2" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="6" Grid.Column="2" Margin="5,5,5,5" />
+			<ComboBox Grid.Row="1" Grid.Column="2" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex11}" />
+			<ComboBox Grid.Row="2" Grid.Column="2" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex21}" />
+			<ComboBox Grid.Row="3" Grid.Column="2" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex31}" />
+			<ComboBox Grid.Row="4" Grid.Column="2" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex41}" />
+			<ComboBox Grid.Row="5" Grid.Column="2" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex51}" />
+			<ComboBox Grid.Row="6" Grid.Column="2" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex61}" />
 			<!-- 装備2 -->
-			<ComboBox Grid.Row="1" Grid.Column="3" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="2" Grid.Column="3" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="3" Grid.Column="3" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="4" Grid.Column="3" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="5" Grid.Column="3" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="6" Grid.Column="3" Margin="5,5,5,5" />
+			<ComboBox Grid.Row="1" Grid.Column="3" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex12}" />
+			<ComboBox Grid.Row="2" Grid.Column="3" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex22}" />
+			<ComboBox Grid.Row="3" Grid.Column="3" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex32}" />
+			<ComboBox Grid.Row="4" Grid.Column="3" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex42}" />
+			<ComboBox Grid.Row="5" Grid.Column="3" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex52}" />
+			<ComboBox Grid.Row="6" Grid.Column="3" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex62}" />
 			<!-- 装備3 -->
-			<ComboBox Grid.Row="1" Grid.Column="4" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="2" Grid.Column="4" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="3" Grid.Column="4" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="4" Grid.Column="4" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="5" Grid.Column="4" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="6" Grid.Column="4" Margin="5,5,5,5" />
+			<ComboBox Grid.Row="1" Grid.Column="4" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex13}" />
+			<ComboBox Grid.Row="2" Grid.Column="4" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex23}" />
+			<ComboBox Grid.Row="3" Grid.Column="4" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex33}" />
+			<ComboBox Grid.Row="4" Grid.Column="4" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex43}" />
+			<ComboBox Grid.Row="5" Grid.Column="4" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex53}" />
+			<ComboBox Grid.Row="6" Grid.Column="4" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex63}" />
 			<!-- 装備4 -->
-			<ComboBox Grid.Row="1" Grid.Column="5" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="2" Grid.Column="5" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="3" Grid.Column="5" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="4" Grid.Column="5" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="5" Grid.Column="5" Margin="5,5,5,5" />
-			<ComboBox Grid.Row="6" Grid.Column="5" Margin="5,5,5,5" />
+			<ComboBox Grid.Row="1" Grid.Column="5" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex14}" />
+			<ComboBox Grid.Row="2" Grid.Column="5" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex24}" />
+			<ComboBox Grid.Row="3" Grid.Column="5" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex34}" />
+			<ComboBox Grid.Row="4" Grid.Column="5" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex44}" />
+			<ComboBox Grid.Row="5" Grid.Column="5" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex54}" />
+			<ComboBox Grid.Row="6" Grid.Column="5" Margin="5,5,5,5" ItemsSource="{Binding WeaponNameList}" SelectedIndex="{Binding WeaponSelectedIndex64}" />
 		</Grid>
 		<Grid Grid.Row="1" Margin="5,5,5,5">
 			<Grid.ColumnDefinitions>

@@ -11,7 +11,9 @@ namespace CarrierSlideRuler.Models {
 	using WeaponTable = Dictionary<string, WeaponData>;
 	static class Database {
 		static KammusuTable kammusuDictionary;
+		static WeaponTable weaponDictionary;
 		public static void Initialize() {
+			#region 艦娘データを読み込む
 			kammusuDictionary = new KammusuTable();
 			using (var sr = new System.IO.StreamReader(@"kammusu.csv")) {
 				while (!sr.EndOfStream) {
@@ -23,7 +25,7 @@ namespace CarrierSlideRuler.Models {
 					if (!match.Success) {
 						continue;
 					}
-					// 取り出した数値をKammusuDataに変換する
+					// 取り出した数値をKammusuDataに変換し、kammusuDictionaryに代入する
 					{
 						try {
 							int id = int.Parse(match.Groups["Number"].Value);
@@ -53,12 +55,51 @@ namespace CarrierSlideRuler.Models {
 						}
 					}
 				}
-				return;
 			}
+			#endregion
+			#region 装備データを読み込む
+			weaponDictionary = new WeaponTable();
+			using (var sr = new System.IO.StreamReader(@"weapon.csv")) {
+				while (!sr.EndOfStream) {
+					// 1行を読み込む
+					string line = sr.ReadLine();
+					// マッチさせてから各数値を取り出す
+					string pattern = @"(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<Torpedo>\d+),(?<Bomb>\d+),(?<AntiAir>\d+),(?<Hit>\d+),(?<Evade>\d+)";
+					var match = Regex.Match(line, pattern);
+					if (!match.Success) {
+						continue;
+					}
+					// 取り出した数値をWeaponDataに変換し、weaponDictionaryに代入する
+					{
+						try {
+							int id = int.Parse(match.Groups["Number"].Value);
+							string name = match.Groups["Name"].Value;
+							WeaponType type = Constant.ParseWeaponType(match.Groups["Type"].Value);
+							int attack = int.Parse(match.Groups["Attack"].Value);
+							int torpedo = int.Parse(match.Groups["Torpedo"].Value);
+							int bomb = int.Parse(match.Groups["Bomb"].Value);
+							int antiair = int.Parse(match.Groups["AntiAir"].Value);
+							int hit = int.Parse(match.Groups["Hit"].Value);
+							int evade = int.Parse(match.Groups["Evade"].Value);
+							var weapon = new WeaponData(id, name, type, attack, torpedo, bomb, antiair, hit, evade);
+							weaponDictionary[name] = weapon;
+						}
+						catch {
+							continue;
+						}
+					}
+				}
+			}
+			#endregion
 		}
 		public static List<string> KammusuNameList {
 			get {
 				return kammusuDictionary.Keys.ToList();
+			}
+		}
+		public static List<string> WeaponNameList {
+			get {
+				return weaponDictionary.Keys.ToList();
 			}
 		}
 	}

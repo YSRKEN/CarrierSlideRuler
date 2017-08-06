@@ -10,7 +10,7 @@ namespace CarrierSlideRuler.Models {
 	// 艦種データ
 	enum FleetType { None, CV, ACV, CVL, CA, CAV, CC, BB, BBV, AV, SSV, Other }
 	// 装備種データ
-	enum WeaponType { None, PF, PA, PB, JPB, WF, WB, PS, PSK, PSS, AS }
+	enum WeaponType { None, PF, PA, PB, JPB, WF, WB, PS, PSK, PSS, AS, Other }
 	// その他定数
 	static class Constant {
 		// 艦種データと文字列との対応ハッシュ
@@ -45,6 +45,7 @@ namespace CarrierSlideRuler.Models {
 			{"艦上偵察機(景雲)", WeaponType.PSK}, //Plane Searcher(Keiun)
 			{"艦上偵察機(彩雲)", WeaponType.PSS}, //Plane Searcher(Saiun)
 			{"航空要員", WeaponType.AS}, //Air Staff
+			{"その他", WeaponType.Other},
 		};
 		// 文字列を 装備種データに変換
 		public static WeaponType ParseWeaponType(string str) {
