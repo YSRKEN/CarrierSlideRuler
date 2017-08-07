@@ -12,6 +12,7 @@ namespace CarrierSlideRuler.Models {
 	static class Database {
 		static KammusuTable kammusuDictionary;
 		static WeaponTable weaponDictionary;
+		// 初期化
 		public static void Initialize() {
 			#region 艦娘データを読み込む
 			kammusuDictionary = new KammusuTable();
@@ -92,15 +93,25 @@ namespace CarrierSlideRuler.Models {
 			}
 			#endregion
 		}
+		// 艦娘名のリスト
 		public static List<string> KammusuNameList {
 			get {
 				return kammusuDictionary.Keys.ToList();
 			}
 		}
+		// 装備名のリスト
 		public static List<string> WeaponNameList {
 			get {
 				return weaponDictionary.Keys.ToList();
 			}
+		}
+		// 艦娘データ
+		public static KammusuData GetKammusuData(string name) {
+			return kammusuDictionary[name];
+		}
+		// 装備データ
+		public static WeaponData GetWeaponData(string name) {
+			return weaponDictionary[name];
 		}
 	}
 	// 艦娘データの内部表現
@@ -196,6 +207,11 @@ namespace CarrierSlideRuler.Models {
 			AntiAir = antiAir;
 			Hit = hit;
 			Evade = evade;
+		}
+		// Stage1(航空戦)に参加するか？
+		public bool IsStage1 {
+			get => (Type == WeaponType.PF || Type == WeaponType.PA || Type == WeaponType.PB
+				|| Type == WeaponType.JPB || Type == WeaponType.WF || Type == WeaponType.WB);
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				kammusuSelectedIndex1 = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex1));
+				SetMyAirPower();
 			}
 		}
 		int kammusuSelectedIndex2;
@@ -25,6 +26,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				kammusuSelectedIndex2 = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex2));
+				SetMyAirPower();
 			}
 		}
 		int kammusuSelectedIndex3;
@@ -33,6 +35,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				kammusuSelectedIndex3 = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex3));
+				SetMyAirPower();
 			}
 		}
 		int kammusuSelectedIndex4;
@@ -41,6 +44,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				kammusuSelectedIndex4 = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex4));
+				SetMyAirPower();
 			}
 		}
 		int kammusuSelectedIndex5;
@@ -49,6 +53,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				kammusuSelectedIndex5 = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex5));
+				SetMyAirPower();
 			}
 		}
 		int kammusuSelectedIndex6;
@@ -57,7 +62,18 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				kammusuSelectedIndex6 = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex6));
+				SetMyAirPower();
 			}
+		}
+		List<int> kammusuIndexList {
+			get => new List<int> {
+				KammusuSelectedIndex1,
+				KammusuSelectedIndex2,
+				KammusuSelectedIndex3,
+				KammusuSelectedIndex4,
+				KammusuSelectedIndex5,
+				KammusuSelectedIndex6
+			};
 		}
 		#endregion
 		#region 装備選択
@@ -68,6 +84,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex11 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex11));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex21;
@@ -76,6 +93,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex21 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex21));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex31;
@@ -84,6 +102,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex31 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex31));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex41;
@@ -92,6 +111,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex41 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex41));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex51;
@@ -100,6 +120,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex51 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex51));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex61;
@@ -108,6 +129,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex61 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex61));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex12;
@@ -116,6 +138,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex12 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex12));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex22;
@@ -124,6 +147,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex22 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex22));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex32;
@@ -132,6 +156,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex32 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex32));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex42;
@@ -140,6 +165,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex42 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex42));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex52;
@@ -148,6 +174,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex52 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex52));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex62;
@@ -156,6 +183,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex62 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex62));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex13;
@@ -164,6 +192,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex13 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex13));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex23;
@@ -172,6 +201,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex23 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex23));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex33;
@@ -180,6 +210,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex33 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex33));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex43;
@@ -188,6 +219,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex43 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex43));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex53;
@@ -196,6 +228,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex53 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex53));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex63;
@@ -204,6 +237,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex63 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex63));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex14;
@@ -212,6 +246,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex14 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex14));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex24;
@@ -220,6 +255,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex24 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex24));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex34;
@@ -228,6 +264,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex34 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex34));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex44;
@@ -236,6 +273,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex44 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex44));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex54;
@@ -244,6 +282,7 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex54 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex54));
+				SetMyAirPower();
 			}
 		}
 		int weaponSelectedIndex64;
@@ -252,18 +291,86 @@ namespace CarrierSlideRuler.ViewModels {
 			set {
 				weaponSelectedIndex64 = value;
 				NotifyPropertyChanged(nameof(WeaponSelectedIndex64));
+				SetMyAirPower();
 			}
 		}
+		List<List<int>> weaponIndexList {
+			get => new List<List<int>> {
+				new List<int> { WeaponSelectedIndex11, WeaponSelectedIndex12, WeaponSelectedIndex13, WeaponSelectedIndex14 },
+				new List<int> { WeaponSelectedIndex21, WeaponSelectedIndex22, WeaponSelectedIndex23, WeaponSelectedIndex24 },
+				new List<int> { WeaponSelectedIndex31, WeaponSelectedIndex32, WeaponSelectedIndex33, WeaponSelectedIndex34 },
+				new List<int> { WeaponSelectedIndex41, WeaponSelectedIndex42, WeaponSelectedIndex43, WeaponSelectedIndex44 },
+				new List<int> { WeaponSelectedIndex51, WeaponSelectedIndex52, WeaponSelectedIndex53, WeaponSelectedIndex54 },
+				new List<int> { WeaponSelectedIndex61, WeaponSelectedIndex62, WeaponSelectedIndex63, WeaponSelectedIndex64 },
+			};
+		}
 		#endregion
+		// タイトルバー
+		string title;
+		public string Title {
+			get => title;
+			set {
+				title = value;
+				NotifyPropertyChanged(nameof(Title));
+			}
+		}
+		// 敵制空値
+		string enemyAirPower;
+		public string EnemyAirPower {
+			get => enemyAirPower;
+			set {
+				enemyAirPower = value;
+				NotifyPropertyChanged(nameof(EnemyAirPower));
+				SetMyAirPower();
+			}
+		}
 		// 「最適化」ボタン
 		public ICommand ButtonCommand { get; }
 		private void ButtonAction() {
 			//
 		}
+		// 自制空値を計算
+		private int CalcMyAirPower() {
+			// 隻数と装備数
+			const int maxKammusuCount = 6;
+			const int maxWeaponCount = 4;
+			// 制空値を計算
+			int sum = 0;
+			for(int k = 0; k < maxKammusuCount; ++k) {
+				var kammusu = Database.GetKammusuData(Database.KammusuNameList[kammusuIndexList[k]]);
+				for (int w = 0; w < maxWeaponCount; ++w) {
+					if (kammusu.Airs[w] <= 0) continue;
+					var weapon = Database.GetWeaponData(Database.WeaponNameList[weaponIndexList[k][w]]);
+					if (!weapon.IsStage1) continue;
+					double temp = Math.Sqrt(kammusu.Airs[w]) * weapon.AntiAir + (Math.Sqrt(100 / 10) + Constant.AntiAirBonus(weapon.Type));
+					sum += (int)temp;
+				}
+			}
+			return sum;
+		}
+		// 敵制空値を取得
+		private int GetEenmyAirPower() {
+			int temp;
+			if(int.TryParse(EnemyAirPower, out temp)) {
+				return (temp >=0 ? temp : 0);
+			}
+			else {
+				return 0;
+			}
+		}
+		// コンボボックスや敵制空値を弄った際の処理
+		private void SetMyAirPower() {
+			Title = "CarrierSlideRuler(計算中...)";
+			int myAirPower = CalcMyAirPower();
+			int enemyAirPower = GetEenmyAirPower();
+			Title = $"CarrierSlideRuler(自制空値{myAirPower}, 敵制空値{enemyAirPower})";
+		}
 		// コンストラクタ
 		public MainViewModel() {
 			// ボタン設定
 			ButtonCommand = new CommandBase(ButtonAction);
+			// 敵制空値
+			EnemyAirPower = "100";
 			// 艦娘名選択
 			{
 				KammusuNameList = new ObservableCollection<string>();
@@ -310,6 +417,8 @@ namespace CarrierSlideRuler.ViewModels {
 				WeaponSelectedIndex54 = defaultSelectedIndex;
 				WeaponSelectedIndex64 = defaultSelectedIndex;
 			}
+			// タイトルバー
+			Title = "CarrierSlideRuler";
 		}
 	}
 }

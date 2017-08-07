@@ -53,5 +53,17 @@ namespace CarrierSlideRuler.Models {
 				return weaponTypeTable[str];
 			throw new FormatException();
 		}
+		// 艦載機熟練度による制空ボーナス
+		public static int AntiAirBonus(WeaponType wt) {
+			switch (wt) {
+			case WeaponType.PF:
+			case WeaponType.WF: return 22;
+			case WeaponType.WB: return 6;
+			case WeaponType.PA:
+			case WeaponType.PB:
+			case WeaponType.JPB:
+			default: return 0;
+			}
+		}
 	}
 }
