@@ -11,73 +11,60 @@ namespace CarrierSlideRuler.ViewModels {
 	class MainViewModel : ViewModelBase {
 		#region 艦娘名選択
 		public ObservableCollection<string> KammusuNameList { get; }
-		int kammusuSelectedIndex1;
+		int[] kammusuSelectedIndex;
 		public int KammusuSelectedIndex1 {
-			get => kammusuSelectedIndex1;
+			get => kammusuSelectedIndex[0];
 			set {
-				kammusuSelectedIndex1 = value;
+				kammusuSelectedIndex[0] = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex1));
 				SetMyAirPower();
 			}
 		}
-		int kammusuSelectedIndex2;
 		public int KammusuSelectedIndex2 {
-			get => kammusuSelectedIndex2;
+			get => kammusuSelectedIndex[1];
 			set {
-				kammusuSelectedIndex2 = value;
+				kammusuSelectedIndex[1] = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex2));
 				SetMyAirPower();
 			}
 		}
-		int kammusuSelectedIndex3;
 		public int KammusuSelectedIndex3 {
-			get => kammusuSelectedIndex3;
+			get => kammusuSelectedIndex[2];
 			set {
-				kammusuSelectedIndex3 = value;
+				kammusuSelectedIndex[2] = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex3));
 				SetMyAirPower();
 			}
 		}
-		int kammusuSelectedIndex4;
 		public int KammusuSelectedIndex4 {
-			get => kammusuSelectedIndex4;
+			get => kammusuSelectedIndex[3];
 			set {
-				kammusuSelectedIndex4 = value;
+				kammusuSelectedIndex[3] = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex4));
 				SetMyAirPower();
 			}
 		}
-		int kammusuSelectedIndex5;
 		public int KammusuSelectedIndex5 {
-			get => kammusuSelectedIndex5;
+			get => kammusuSelectedIndex[4];
 			set {
-				kammusuSelectedIndex5 = value;
+				kammusuSelectedIndex[4] = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex5));
 				SetMyAirPower();
 			}
 		}
-		int kammusuSelectedIndex6;
 		public int KammusuSelectedIndex6 {
-			get => kammusuSelectedIndex6;
+			get => kammusuSelectedIndex[5];
 			set {
-				kammusuSelectedIndex6 = value;
+				kammusuSelectedIndex[5] = value;
 				NotifyPropertyChanged(nameof(KammusuSelectedIndex6));
 				SetMyAirPower();
 			}
 		}
-		List<int> kammusuIndexList {
-			get => new List<int> {
-				KammusuSelectedIndex1,
-				KammusuSelectedIndex2,
-				KammusuSelectedIndex3,
-				KammusuSelectedIndex4,
-				KammusuSelectedIndex5,
-				KammusuSelectedIndex6
-			};
-		}
 		#endregion
+
 		#region 装備選択
 		public ObservableCollection<string> WeaponNameList { get; }
+		#region コンボボックス本体
 		int weaponSelectedIndex11;
 		public int WeaponSelectedIndex11 {
 			get => weaponSelectedIndex11;
@@ -294,6 +281,8 @@ namespace CarrierSlideRuler.ViewModels {
 				SetMyAirPower();
 			}
 		}
+		#endregion
+		// (k+1)番目の艦娘の(w+1)番目の装備のインデックス＝weaponIndexList[k][w]
 		List<List<int>> weaponIndexList {
 			get => new List<List<int>> {
 				new List<int> { WeaponSelectedIndex11, WeaponSelectedIndex12, WeaponSelectedIndex13, WeaponSelectedIndex14 },
@@ -305,6 +294,7 @@ namespace CarrierSlideRuler.ViewModels {
 			};
 		}
 		#endregion
+
 		// タイトルバー
 		string title;
 		public string Title {
@@ -337,7 +327,7 @@ namespace CarrierSlideRuler.ViewModels {
 			// 制空値を計算
 			int sum = 0;
 			for(int k = 0; k < maxKammusuCount; ++k) {
-				var kammusu = Database.GetKammusuData(Database.KammusuNameList[kammusuIndexList[k]]);
+				var kammusu = Database.GetKammusuData(Database.KammusuNameList[kammusuSelectedIndex[k]]);
 				for (int w = 0; w < maxWeaponCount; ++w) {
 					if (kammusu.Airs[w] <= 0) continue;
 					var weapon = Database.GetWeaponData(Database.WeaponNameList[weaponIndexList[k][w]]);
@@ -369,21 +359,16 @@ namespace CarrierSlideRuler.ViewModels {
 		public MainViewModel() {
 			// ボタン設定
 			ButtonCommand = new CommandBase(ButtonAction);
-			// 敵制空値
-			EnemyAirPower = "100";
 			// 艦娘名選択
 			{
+				// コンボボックスの中身をセット
 				KammusuNameList = new ObservableCollection<string>();
 				foreach(string name in Database.KammusuNameList) {
 					KammusuNameList.Add(name);
 				}
+				// 選択するインデックスを初期化
 				int defaultSelectedIndex = KammusuNameList.Count - 1;
-				KammusuSelectedIndex1 = defaultSelectedIndex;
-				KammusuSelectedIndex2 = defaultSelectedIndex;
-				KammusuSelectedIndex3 = defaultSelectedIndex;
-				KammusuSelectedIndex4 = defaultSelectedIndex;
-				KammusuSelectedIndex5 = defaultSelectedIndex;
-				KammusuSelectedIndex6 = defaultSelectedIndex;
+				kammusuSelectedIndex = Enumerable.Repeat(defaultSelectedIndex, Constant.MaxKammusuCount).ToArray();
 			}
 			// 装備名選択
 			{
@@ -417,8 +402,8 @@ namespace CarrierSlideRuler.ViewModels {
 				WeaponSelectedIndex54 = defaultSelectedIndex;
 				WeaponSelectedIndex64 = defaultSelectedIndex;
 			}
-			// タイトルバー
-			Title = "CarrierSlideRuler";
+			// 敵制空値
+			EnemyAirPower = "100";
 		}
 	}
 }
