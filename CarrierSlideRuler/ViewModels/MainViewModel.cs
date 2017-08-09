@@ -16,11 +16,90 @@ namespace CarrierSlideRuler.ViewModels {
 			public List<string> SelectList { get; set; }
 			public bool Flg { get; set; }
 		}
-		public class Unit {
+		public class Unit : ViewModelBase {
 			Action act;
 
 			string name;
-			public string Name { get => name; set { name = value;  act(); } }
+			public string Name {
+				get => name;
+				set {
+					// 値を更新
+					name = value;
+					// 艦娘が変化したので、それに合わせてプロパティを変化させる
+					var kammusu = Database.GetKammusuData(name);
+					{
+						// 装備コンボボックスのON/OFF
+						for (int w = 0; w < kammusu.SlotCount; ++w) {
+							PartsList[w].Flg = true;
+						}
+						for (int w = kammusu.SlotCount; w < Constant.MaxWeaponCount; ++w) {
+							PartsList[w].Flg = false;
+						}
+						NotifyPropertyChanged(nameof(PFlg1));
+						NotifyPropertyChanged(nameof(PFlg2));
+						NotifyPropertyChanged(nameof(PFlg3));
+						NotifyPropertyChanged(nameof(PFlg4));
+						// 装備コンボボックスの中身
+						for (int w = 0; w < kammusu.SlotCount; ++w) {
+							// 一覧を初期化
+							PartsList[w].SelectList = new List<string>();
+							// 線形検索
+							foreach(string name in Database.WeaponNameList) {
+								// 装備の種類を取得
+								var type = Database.GetWeaponData(name).Type;
+								// 艦娘の状態に合わせ、その装備を装備できるかを判定する
+								switch (type) {
+								case WeaponType.PF:
+									if (kammusu.HasPF) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.PA:
+									if (kammusu.HasPA) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.PB:
+									if (kammusu.HasPB) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.JPB:
+									if (kammusu.HasJPB) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.WF:
+									if (kammusu.HasWF) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.WB:
+									if (kammusu.HasWB) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.PS:
+								case WeaponType.PSS:
+									if (kammusu.HasPS) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.PSK:
+									if (kammusu.HasPSK) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.AS:
+									if (kammusu.HasAS) PartsList[w].SelectList.Add(name);
+									break;
+								case WeaponType.Other:
+									PartsList[w].SelectList.Add(name);
+									break;
+								}
+							}
+						}
+						NotifyPropertyChanged(nameof(PSelectList1));
+						NotifyPropertyChanged(nameof(PSelectList2));
+						NotifyPropertyChanged(nameof(PSelectList3));
+						NotifyPropertyChanged(nameof(PSelectList4));
+						// 装備コンボボックスの表示内容
+						for (int w = kammusu.SlotCount; w < Constant.MaxWeaponCount; ++w) {
+							PartsList[w].Name = "なし";
+						}
+						NotifyPropertyChanged(nameof(PName1));
+						NotifyPropertyChanged(nameof(PName2));
+						NotifyPropertyChanged(nameof(PName3));
+						NotifyPropertyChanged(nameof(PName4));
+					}
+					// SetTitleBarを走らせる
+					act();
+				}
+			}
 			public List<string> SelectList { get; set; }
 			public List<Parts> PartsList;
 
@@ -91,7 +170,6 @@ namespace CarrierSlideRuler.ViewModels {
 			UnitList = new List<Unit>();
 			for(int k  = 0; k < Constant.MaxKammusuCount; ++k) {
 				var unit = new Unit(SetTitleBar);
-				unit.Name = "なし";
 				unit.PartsList = new List<Parts>();
 				unit.SelectList = KammusuNameList;
 				for (int w = 0; w < Constant.MaxWeaponCount; ++w) {
@@ -101,6 +179,7 @@ namespace CarrierSlideRuler.ViewModels {
 					parts.SelectList = new List<string>{ "なし" };
 					unit.PartsList.Add(parts);
 				}
+				unit.Name = "なし";
 				UnitList.Add(unit);
 			}
 			#endregion
