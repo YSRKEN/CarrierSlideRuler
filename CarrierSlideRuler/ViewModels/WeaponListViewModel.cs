@@ -23,7 +23,7 @@ namespace CarrierSlideRuler.ViewModels {
 
 		// 装備所持数を保存
 		public void SaveHaveWeaponData() {
-			using (var sw = new System.IO.StreamWriter(@"has_weapon.csv")) {
+			using (var sw = new System.IO.StreamWriter(@"have_weapon.csv")) {
 				foreach (var data in HaveWeaponList) {
 					int id = Database.GetWeaponData(data.Name).Id;
 					int count = data.Count;
@@ -43,7 +43,7 @@ namespace CarrierSlideRuler.ViewModels {
 				// 追加
 				var hw = new HaveWeapon(SaveHaveWeaponData);
 				hw.Name = name;
-				hw.Count = Database.GetHasWeaponCount(id);
+				hw.Count = Database.GetHaveWeaponCount(id);
 				hw.CountList = Enumerable.Range(0, 100).Select(p => p.ToString()).ToList();
 				HaveWeaponList.Add(hw);
 			}

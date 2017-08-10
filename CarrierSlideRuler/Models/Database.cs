@@ -9,11 +9,11 @@ namespace CarrierSlideRuler.Models {
 	// データベース
 	using KammusuTable = Dictionary<string, KammusuData>;
 	using WeaponTable = Dictionary<string, WeaponData>;
-	using HasWeaponTable = Dictionary<int, int>;
+	using HaveWeaponTable = Dictionary<int, int>;
 	static class Database {
 		static KammusuTable kammusuDictionary;
 		static WeaponTable weaponDictionary;
-		static HasWeaponTable hasWeaponDictionary;
+		static HaveWeaponTable haveWeaponDictionary;
 		// 初期化
 		public static void Initialize() {
 			#region 艦娘データを読み込む
@@ -95,10 +95,10 @@ namespace CarrierSlideRuler.Models {
 			}
 			#endregion
 			#region 所持装備データを読み込む
-			hasWeaponDictionary = new HasWeaponTable();
+			haveWeaponDictionary = new HaveWeaponTable();
 			// ファイル(has_weapon.csv)が存在する場合はそちらから読み取る
-			if (System.IO.File.Exists(@"has_weapon.csv")) {
-				using (var sr = new System.IO.StreamReader(@"has_weapon.csv")) {
+			if (System.IO.File.Exists(@"have_weapon.csv")) {
+				using (var sr = new System.IO.StreamReader(@"have_weapon.csv")) {
 					while (!sr.EndOfStream) {
 						// 1行を読み込む
 						string line = sr.ReadLine();
@@ -114,7 +114,7 @@ namespace CarrierSlideRuler.Models {
 								int id = int.Parse(match.Groups["Number"].Value);
 								int count = int.Parse(match.Groups["Count"].Value);
 								count = (count >= 100 ? 99 : count < 0 ? 0 : count);
-								hasWeaponDictionary[id] = count;
+								haveWeaponDictionary[id] = count;
 							}
 							catch {
 								continue;
@@ -126,8 +126,8 @@ namespace CarrierSlideRuler.Models {
 			// 読み取ってない部分の装備について情報を補完する
 			foreach(var pair in weaponDictionary) {
 				int id = pair.Value.Id;
-				if (!hasWeaponDictionary.ContainsKey(id)) {
-					hasWeaponDictionary[id] = 0;
+				if (!haveWeaponDictionary.ContainsKey(id)) {
+					haveWeaponDictionary[id] = 0;
 				}
 			}
 			#endregion
@@ -153,9 +153,9 @@ namespace CarrierSlideRuler.Models {
 			return weaponDictionary[name];
 		}
 		// 所持装備データ
-		public static int GetHasWeaponCount(int id) {
-			if (hasWeaponDictionary.ContainsKey(id)) {
-				return hasWeaponDictionary[id];
+		public static int GetHaveWeaponCount(int id) {
+			if (haveWeaponDictionary.ContainsKey(id)) {
+				return haveWeaponDictionary[id];
 			}
 			else {
 				return 0;
