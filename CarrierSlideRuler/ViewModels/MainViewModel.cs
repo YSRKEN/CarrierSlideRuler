@@ -121,6 +121,15 @@ namespace CarrierSlideRuler.ViewModels {
 			public Unit(Action act_) { act = act_; }
 		}
 
+		// 制空状態を判定
+		private string GetAirWarStatus(int myAirPower, int enemyAirPower) {
+			if (myAirPower >= enemyAirPower * 3) return "制空権確保";
+			if (myAirPower * 2 >= enemyAirPower * 3) return "航空優勢";
+			if (myAirPower * 3 >= enemyAirPower * 2) return "航空均衡";
+			if (myAirPower * 3 >= enemyAirPower) return "航空劣勢";
+			return "制空権喪失";
+		}
+
 		// 艦名一覧
 		public List<string> KammusuNameList;
 		// 艦名や装備についての情報リスト
@@ -150,7 +159,7 @@ namespace CarrierSlideRuler.ViewModels {
 		public void SetTitleBar() {
 			Title = "CarrierSlideRuler(計算中...)";
 			int myAirPower = GetMyAirPower();
-			Title = $"CarrierSlideRuler(自制空値{myAirPower}, 敵制空値{enemyAirPower})";
+			Title = $"CarrierSlideRuler(自制空値{myAirPower}, 敵制空値{enemyAirPower}, {GetAirWarStatus(myAirPower, enemyAirPower)})";
 		}
 
 		// 敵制空値
