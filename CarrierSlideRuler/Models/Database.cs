@@ -9,9 +9,11 @@ namespace CarrierSlideRuler.Models {
 	// データベース
 	using KammusuTable = Dictionary<string, KammusuData>;
 	using WeaponTable = Dictionary<string, WeaponData>;
+	using HasWeaponTable = Dictionary<int, int>;
 	static class Database {
 		static KammusuTable kammusuDictionary;
 		static WeaponTable weaponDictionary;
+		static HasWeaponTable hasWeaponDictionary;
 		// 初期化
 		public static void Initialize() {
 			#region 艦娘データを読み込む
@@ -21,7 +23,7 @@ namespace CarrierSlideRuler.Models {
 					// 1行を読み込む
 					string line = sr.ReadLine();
 					// マッチさせてから各数値を取り出す
-					string pattern = @"(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<SlotCount>\d+),(?<Airs1>\d+),(?<Airs2>\d+),(?<Airs3>\d+),(?<Airs4>\d+),(?<HasPF>○|×),(?<HasPA>○|×),(?<HasPB>○|×),(?<HasJPB>○|×),(?<HasWF>○|×),(?<HasWB>○|×),(?<HasPS>○|×),(?<HasPSK>○|×),(?<HasAS>○|×)";
+					string pattern = @"^(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<SlotCount>\d+),(?<Airs1>\d+),(?<Airs2>\d+),(?<Airs3>\d+),(?<Airs4>\d+),(?<HasPF>○|×),(?<HasPA>○|×),(?<HasPB>○|×),(?<HasJPB>○|×),(?<HasWF>○|×),(?<HasWB>○|×),(?<HasPS>○|×),(?<HasPSK>○|×),(?<HasAS>○|×)";
 					var match = Regex.Match(line, pattern);
 					if (!match.Success) {
 						continue;
@@ -65,7 +67,7 @@ namespace CarrierSlideRuler.Models {
 					// 1行を読み込む
 					string line = sr.ReadLine();
 					// マッチさせてから各数値を取り出す
-					string pattern = @"(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<Torpedo>\d+),(?<Bomb>\d+),(?<AntiAir>\d+),(?<Hit>\d+),(?<Evade>\d+)";
+					string pattern = @"^(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<Torpedo>\d+),(?<Bomb>\d+),(?<AntiAir>\d+),(?<Hit>\d+),(?<Evade>\d+)";
 					var match = Regex.Match(line, pattern);
 					if (!match.Success) {
 						continue;
@@ -92,6 +94,43 @@ namespace CarrierSlideRuler.Models {
 				}
 			}
 			#endregion
+			#region 所持装備データを読み込む
+			hasWeaponDictionary = new HasWeaponTable();
+			// ファイル(has_weapon.csv)が存在する場合はそちらから読み取る
+			if (System.IO.File.Exists(@"has_weapon.csv")) {
+				using (var sr = new System.IO.StreamReader(@"has_weapon.csv")) {
+					while (!sr.EndOfStream) {
+						// 1行を読み込む
+						string line = sr.ReadLine();
+						// マッチさせてから各数値を取り出す
+						string pattern = @"^(?<Number>\d+),(?<Count>\d+)";
+						var match = Regex.Match(line, pattern);
+						if (!match.Success) {
+							continue;
+						}
+						// 取り出した数値をhasWeaponDictionaryに代入する
+						{
+							try {
+								int id = int.Parse(match.Groups["Number"].Value);
+								int count = int.Parse(match.Groups["Count"].Value);
+								count = (count >= 100 ? 99 : count < 0 ? 0 : count);
+								hasWeaponDictionary[id] = count;
+							}
+							catch {
+								continue;
+							}
+						}
+					}
+				}
+			}
+			// 読み取ってない部分の装備について情報を補完する
+			foreach(var pair in weaponDictionary) {
+				int id = pair.Value.Id;
+				if (!hasWeaponDictionary.ContainsKey(id)) {
+					hasWeaponDictionary[id] = 0;
+				}
+			}
+			#endregion
 		}
 		// 艦娘名のリスト
 		public static List<string> KammusuNameList {
@@ -112,6 +151,15 @@ namespace CarrierSlideRuler.Models {
 		// 装備データ
 		public static WeaponData GetWeaponData(string name) {
 			return weaponDictionary[name];
+		}
+		// 所持装備データ
+		public static int GetHasWeaponCount(int id) {
+			if (hasWeaponDictionary.ContainsKey(id)) {
+				return hasWeaponDictionary[id];
+			}
+			else {
+				return 0;
+			}
 		}
 	}
 	// 艦娘データの内部表現
