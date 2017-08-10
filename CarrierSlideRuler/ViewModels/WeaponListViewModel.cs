@@ -9,11 +9,28 @@ namespace CarrierSlideRuler.ViewModels {
 	class WeaponListViewModel : ViewModelBase {
 		// 装備所持数についての情報
 		public class HaveWeapon {
+			Action act;
 			public string Name { get; set; }
-			public int Count { get; set; }
+			int count;
+			public int Count { get => count; set { count = value; act(); } }
 			public List<string> CountList { get; set; }
+
+			public HaveWeapon(Action act_) {
+				act = act_;
+			}
 		}
 		public List<HaveWeapon> HaveWeaponList { get; set; }
+
+		// 装備所持数を保存
+		public void SaveHaveWeaponData() {
+			using (var sw = new System.IO.StreamWriter(@"has_weapon.csv")) {
+				foreach (var data in HaveWeaponList) {
+					int id = Database.GetWeaponData(data.Name).Id;
+					int count = data.Count;
+					sw.Write($"{id},{count}\n");
+				}
+			}
+		}
 
 		public WeaponListViewModel() {
 			// 装備所持数を初期化
@@ -24,7 +41,7 @@ namespace CarrierSlideRuler.ViewModels {
 				var weapon = Database.GetWeaponData(name);
 				int id = weapon.Id;
 				// 追加
-				var hw = new HaveWeapon();
+				var hw = new HaveWeapon(SaveHaveWeaponData);
 				hw.Name = name;
 				hw.Count = Database.GetHasWeaponCount(id);
 				hw.CountList = Enumerable.Range(0, 100).Select(p => p.ToString()).ToList();

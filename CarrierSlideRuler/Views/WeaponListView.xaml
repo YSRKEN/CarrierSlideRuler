@@ -19,7 +19,7 @@
 				<DataGridTemplateColumn Header="所持数" Width="50">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox SelectedIndex="{Binding Count}" ItemsSource="{Binding CountList}" />
+							<ComboBox SelectedIndex="{Binding Count, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding CountList}" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
