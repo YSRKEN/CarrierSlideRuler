@@ -39,6 +39,14 @@ namespace CarrierSlideRuler.ViewModels {
 						NotifyPropertyChanged(nameof(PFlg2));
 						NotifyPropertyChanged(nameof(PFlg3));
 						NotifyPropertyChanged(nameof(PFlg4));
+						// 装備コンボボックスの表示内容
+						for (int w = 0; w < Constant.MaxWeaponCount; ++w) {
+							PartsList[w].Name = "なし";
+						}
+						NotifyPropertyChanged(nameof(PName1));
+						NotifyPropertyChanged(nameof(PName2));
+						NotifyPropertyChanged(nameof(PName3));
+						NotifyPropertyChanged(nameof(PName4));
 						// 装備コンボボックスの中身
 						for (int w = 0; w < kammusu.SlotCount; ++w) {
 							// 一覧を初期化
@@ -87,14 +95,6 @@ namespace CarrierSlideRuler.ViewModels {
 						NotifyPropertyChanged(nameof(PSelectList2));
 						NotifyPropertyChanged(nameof(PSelectList3));
 						NotifyPropertyChanged(nameof(PSelectList4));
-						// 装備コンボボックスの表示内容
-						for (int w = kammusu.SlotCount; w < Constant.MaxWeaponCount; ++w) {
-							PartsList[w].Name = "なし";
-						}
-						NotifyPropertyChanged(nameof(PName1));
-						NotifyPropertyChanged(nameof(PName2));
-						NotifyPropertyChanged(nameof(PName3));
-						NotifyPropertyChanged(nameof(PName4));
 					}
 					// SetTitleBarを走らせる
 					act();
@@ -144,7 +144,8 @@ namespace CarrierSlideRuler.ViewModels {
 		}
 
 		// タイトルバー
-		public string Title { get; private set; }
+		string title;
+		public string Title { get => title; private set { title = value; NotifyPropertyChanged(nameof(Title)); } }
 		// タイトルバーを更新する
 		public void SetTitleBar() {
 			Title = "CarrierSlideRuler(計算中...)";
