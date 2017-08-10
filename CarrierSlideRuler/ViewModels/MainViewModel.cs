@@ -1,4 +1,5 @@
 ﻿using CarrierSlideRuler.Models;
+using CarrierSlideRuler.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ using System.Windows.Input;
 namespace CarrierSlideRuler.ViewModels {
 	class MainViewModel : ViewModelBase {
 		public delegate void Action();
+		WeaponListView wlv = null;
 		// 艦名や装備についての情報
 		public class Parts {
 			public string Name { get; set; }
@@ -181,8 +183,13 @@ namespace CarrierSlideRuler.ViewModels {
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
 		private void SetWeaponAction() {
-			//スタブ
+			// 装備一覧画面のインスタンスを作成して表示する
+			wlv = new WeaponListView();
+			var wlvm = new WeaponListViewModel();
+			wlv.DataContext = wlvm;
+			wlv.Show();
 		}
+
 		// 「最適化」ボタン
 		public ICommand OptimizeCommand { get; }
 		private void OptimizeAction() {
