@@ -22,28 +22,28 @@
 				<DataGridTemplateColumn Header="装備1" Width="100">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{Binding PSelectList1}" SelectedItem="{Binding PName1, Mode=TwoWay}" IsEnabled="{Binding PFlg1}" Height="30" FontSize="15" VerticalAlignment="Center" />
+							<ComboBox ItemsSource="{Binding PSelectList1}" SelectedItem="{Binding PName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg1}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="装備2" Width="100">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{Binding PSelectList2}" SelectedItem="{Binding PName2, Mode=TwoWay}" IsEnabled="{Binding PFlg2}" Height="30" FontSize="15" VerticalAlignment="Center" />
+							<ComboBox ItemsSource="{Binding PSelectList2}" SelectedItem="{Binding PName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg2}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="装備3" Width="100">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{Binding PSelectList3}" SelectedItem="{Binding PName3, Mode=TwoWay}" IsEnabled="{Binding PFlg3}" Height="30" FontSize="15" VerticalAlignment="Center" />
+							<ComboBox ItemsSource="{Binding PSelectList3}" SelectedItem="{Binding PName3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg3}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="装備4" Width="100">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ComboBox ItemsSource="{Binding PSelectList4}" SelectedItem="{Binding PName4, Mode=TwoWay}" IsEnabled="{Binding PFlg4}" Height="30" FontSize="15" VerticalAlignment="Center" />
+							<ComboBox ItemsSource="{Binding PSelectList4}" SelectedItem="{Binding PName4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg4}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

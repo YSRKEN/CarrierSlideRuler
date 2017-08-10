@@ -105,10 +105,10 @@ namespace CarrierSlideRuler.ViewModels {
 
 			public List<string> USelectList { get => SelectList; }
 
-			public string PName1 { get => PartsList[0].Name; set { PartsList[0].Name = value; } }
-			public string PName2 { get => PartsList[1].Name; set { PartsList[1].Name = value; } }
-			public string PName3 { get => PartsList[2].Name; set { PartsList[2].Name = value; } }
-			public string PName4 { get => PartsList[3].Name; set { PartsList[3].Name = value; } }
+			public string PName1 { get => PartsList[0].Name; set { PartsList[0].Name = value; act(); } }
+			public string PName2 { get => PartsList[1].Name; set { PartsList[1].Name = value; act(); } }
+			public string PName3 { get => PartsList[2].Name; set { PartsList[2].Name = value; act(); } }
+			public string PName4 { get => PartsList[3].Name; set { PartsList[3].Name = value; act(); } }
 			public List<string> PSelectList1 { get => PartsList[0].SelectList; }
 			public List<string> PSelectList2 { get => PartsList[1].SelectList; }
 			public List<string> PSelectList3 { get => PartsList[2].SelectList; }
@@ -121,12 +121,36 @@ namespace CarrierSlideRuler.ViewModels {
 			public Unit(Action act_) { act = act_; }
 		}
 
-		// タイトルバー
-		public string Title { get; private set; }
 		// 艦名一覧
 		public List<string> KammusuNameList;
 		// 艦名や装備についての情報リスト
 		public List<Unit> UnitList { get; set; }
+		// 自制空値を計算
+		private int GetMyAirPower() {
+			if (UnitList.Count < Constant.MaxKammusuCount)
+				return 0;
+			int sum = 0;
+			for (int k = 0; k < Constant.MaxKammusuCount; ++k) {
+				var kammusu = Database.GetKammusuData(UnitList[k].Name);
+				for (int w = 0; w < Constant.MaxWeaponCount; ++w) {
+					if (kammusu.Airs[w] <= 0) continue;
+					var weapon = Database.GetWeaponData(UnitList[k].PartsList[w].Name);
+					if (!weapon.IsStage1) continue;
+					double temp = Math.Sqrt(kammusu.Airs[w]) * weapon.AntiAir + (Math.Sqrt(100 / 10) + Constant.AntiAirBonus(weapon.Type));
+					sum += (int)temp;
+				}
+			}
+			return sum;
+		}
+
+		// タイトルバー
+		public string Title { get; private set; }
+		// タイトルバーを更新する
+		public void SetTitleBar() {
+			Title = "CarrierSlideRuler(計算中...)";
+			int myAirPower = GetMyAirPower();
+			Title = $"CarrierSlideRuler(自制空値{myAirPower}, 敵制空値{enemyAirPower})";
+		}
 
 		// 敵制空値
 		int enemyAirPower;
@@ -155,10 +179,6 @@ namespace CarrierSlideRuler.ViewModels {
 			//スタブ
 		}
 
-		// タイトルバーを更新する
-		public void SetTitleBar() {
-			Title = "CarrierSlideRuler";
-		}
 		// コンストラクタ
 		public MainViewModel() {
 			// ボタンにCommandを設定する
