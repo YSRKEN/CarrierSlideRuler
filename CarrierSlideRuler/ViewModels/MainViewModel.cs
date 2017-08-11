@@ -147,6 +147,8 @@ namespace CarrierSlideRuler.ViewModels {
 		public int AntiFieldType { get; set; }
 		// 最適化の方向について
 		public int OptimizeType { get; set; }
+		// 制空状態について
+		public int AirStatusMode { get; set; }
 
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
@@ -178,7 +180,21 @@ namespace CarrierSlideRuler.ViewModels {
 				{
 					int p = 0;
 					//制空値制約
-					double wantAaPower = EnemyAirPower * 1.5 * 1.1;
+					double wantAaPower = EnemyAirPower * 1.1;
+					switch (AirStatusMode) {
+					case 0:
+						wantAaPower *= 3;
+						break;
+					case 1:
+						wantAaPower *= 1.5;
+						break;
+					case 2:
+						wantAaPower *= 2.0 / 3;
+						break;
+					case 3:
+						wantAaPower *= 1.0 / 3;
+						break;
+					}
 					problem.SetRowBounds(p, BoundsType.Lower, wantAaPower, 0.0);
 					++p;
 					//スロット制約
@@ -505,6 +521,7 @@ namespace CarrierSlideRuler.ViewModels {
 			EnemyAirPower = 0;
 			AntiFieldType = 0;
 			OptimizeButtonState = true;
+			AirStatusMode = 1;
 		}
 	}
 }

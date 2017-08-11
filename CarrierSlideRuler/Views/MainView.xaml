@@ -58,21 +58,28 @@
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition Width="auto" />
+				<ColumnDefinition Width="auto" />
 			</Grid.ColumnDefinitions>
 			<Button Grid.Column="0" Content="装備..." Command="{Binding SetWeaponCommand}" Margin="5,5,5,5" Padding="10,0,10,0" />
 			<TextBlock Grid.Column="1" Margin="5,5,5,5" VerticalAlignment="Center" Text="必要制空値：" />
 			<TextBox Grid.Column="2" Margin="5,5,5,5" VerticalAlignment="Center" Text="{Binding EnemyAirPower, UpdateSourceTrigger=PropertyChanged}" />
-			<ComboBox Grid.Column="3" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding OptimizeType, UpdateSourceTrigger=PropertyChanged}">
+			<ComboBox Grid.Column="3" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding AirStatusMode, UpdateSourceTrigger=PropertyChanged}">
+				<ComboBoxItem Content="制空権確保" />
+				<ComboBoxItem Content="航空優勢" />
+				<ComboBoxItem Content="制空均衡" />
+				<ComboBoxItem Content="航空劣勢" />
+			</ComboBox>
+			<ComboBox Grid.Column="4" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding OptimizeType, UpdateSourceTrigger=PropertyChanged}">
 				<ComboBoxItem Content="優先なし" />
 				<ComboBoxItem Content="航空戦優先" />
 				<ComboBoxItem Content="砲撃戦優先" />
 			</ComboBox>
-			<ComboBox Grid.Column="4" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding AntiFieldType, UpdateSourceTrigger=PropertyChanged}">
+			<ComboBox Grid.Column="5" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding AntiFieldType, UpdateSourceTrigger=PropertyChanged}">
 				<ComboBoxItem Content="対地指定なし" />
 				<ComboBoxItem Content="対地攻撃ON" />
 				<ComboBoxItem Content="対地攻撃OFF" />
 			</ComboBox>
-			<Button Grid.Column="5" Content="最適化" Command="{Binding OptimizeCommand}" Margin="5,5,5,5" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<Button Grid.Column="6" Content="最適化" Command="{Binding OptimizeCommand}" Margin="5,5,5,5" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 		</Grid>
 	</Grid>
 </Window>
