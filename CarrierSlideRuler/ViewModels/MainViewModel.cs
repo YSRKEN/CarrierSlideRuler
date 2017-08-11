@@ -19,6 +19,7 @@ namespace CarrierSlideRuler.ViewModels {
 			public string Name { get; set; }
 			public List<string> SelectList { get; set; }
 			public bool Flg { get; set; }
+			public bool FixedFlg { get; set; }
 		}
 		public class Unit : ViewModelBase {
 			Action act;
@@ -82,6 +83,10 @@ namespace CarrierSlideRuler.ViewModels {
 			public bool PFlg2 { get => PartsList[1].Flg; }
 			public bool PFlg3 { get => PartsList[2].Flg; }
 			public bool PFlg4 { get => PartsList[3].Flg; }
+			public bool PCheck1 { get => PartsList[0].FixedFlg; set { PartsList[0].FixedFlg = value; } }
+			public bool PCheck2 { get => PartsList[1].FixedFlg; set { PartsList[1].FixedFlg = value; }}
+			public bool PCheck3 { get => PartsList[2].FixedFlg; set { PartsList[2].FixedFlg = value; }}
+			public bool PCheck4 { get => PartsList[3].FixedFlg; set { PartsList[3].FixedFlg = value; }}
 
 			public Unit(Action act_) { act = act_; }
 		}
@@ -212,19 +217,31 @@ namespace CarrierSlideRuler.ViewModels {
 					for (int x = 0; x < X; ++x) {
 						var kammusu = Database.GetKammusuData(UnitList[x].Name);
 						for (int y = 0; y < Y; ++y) {
+							var fixedFlg = new bool[] { UnitList[x].PCheck1, UnitList[x].PCheck2, UnitList[x].PCheck3, UnitList[x].PCheck4 };
 							for (int z = 0; z < Z; ++z) {
 								var weapon = Database.GetWeaponData(weaponList[z]);
 								var wType = weapon.Type;
-								if (!Database.HasWeaponjudge(UnitList[x].Name, weaponList[z]))
+								// その装備が「固定」されている場合はそれに従う
+								if (fixedFlg[y]) {
+									if (weapon.Name != UnitList[x].PartsList[y].Name)
+										problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+									else
+										problem.SetRowBounds(p, BoundsType.Fixed, 1.0, 1.0);
+								}
+								// その装備が搭載不可能な場合は「＝0」
+								else if (!Database.HasWeaponjudge(UnitList[x].Name, weaponList[z]))
 									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+								// その装備の位置が搭載スロット数より後ろの位置なら、「なし」しか載せられないようにする
 								else if (kammusu.SlotCount <= y) {
 									if (weapon.Name != "なし")
 										problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
 									else
 										problem.SetRowBounds(p, BoundsType.Fixed, 1.0, 1.0);
 								}
+								// 対地攻撃ON状態なら、艦爆や噴式は「＝0」
 								else if ((wType == WeaponType.PB || wType == WeaponType.JPB) && (AntiFieldType == 1))
 									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+								// それ以外の場合なら「0≦□≦1」
 								else
 									problem.SetRowBounds(p, BoundsType.Upper, 0.0, 1.0);
 								++p;
@@ -239,12 +256,11 @@ namespace CarrierSlideRuler.ViewModels {
 						++p;
 					}
 					// 対地攻撃OFF制約
-					double temp = (AntiFieldType == 2 ? 1.0 : 0.0);
 					for (int x = 0; x < X; ++x) {
-						for (int y = 0; y < Y; ++y) {
-							problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
-							++p;
-						}
+						var kammusu = Database.GetKammusuData(UnitList[x].Name);
+						double temp = (kammusu.IsAirGunAttack && AntiFieldType == 2 ? 1.0 : 0.0);
+						problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+						++p;
 					}
 					// 航空戦火力
 					problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
@@ -372,7 +388,7 @@ namespace CarrierSlideRuler.ViewModels {
 						}
 					}
 					{
-						// 対地攻撃OFF制約(ia=XY+XYZ+Z+1～XY+XYZ+Z+XY)
+						// 対地攻撃OFF制約(ia=XY+XYZ+Z+1～XY+XYZ+Z+X)
 						int p = X * Y + X * Y * Z + Z + 1;
 						for (int x = 0; x < X; ++x) {
 							for (int y = 0; y < Y; ++y) {
@@ -385,13 +401,13 @@ namespace CarrierSlideRuler.ViewModels {
 									else
 										ar.Add(0.0);
 								}
-								++p;
 							}
+							++p;
 						}
 					}
 					{
-						// 航空戦火力(ia=XY+XYZ+Z+XY+1)
-						int p = X * Y + X * Y * Z + Z + X * Y + 1;
+						// 航空戦火力(ia=XY+XYZ+Z+X+1)
+						int p = X * Y + X * Y * Z + Z + X + 1;
 						for (int x = 0; x < X; ++x) {
 							var kammusu = Database.GetKammusuData(UnitList[x].Name);
 							for (int y = 0; y < Y; ++y) {
@@ -420,7 +436,7 @@ namespace CarrierSlideRuler.ViewModels {
 						ja.Add(X*Y*Z);
 						ar.Add(-1.0);
 						++p;
-						// 砲撃戦火力(ia=XY+XYZ+Z+XY+2)
+						// 砲撃戦火力(ia=XY+XYZ+Z+X+2)
 						for (int x = 0; x < X; ++x) {
 							var kammusu = Database.GetKammusuData(UnitList[x].Name);
 							for (int y = 0; y < Y; ++y) {
@@ -451,7 +467,7 @@ namespace CarrierSlideRuler.ViewModels {
 						ja.Add(X * Y * Z + 1);
 						ar.Add(-1.0);
 						++p;
-						// 彩雲の有無(ia=XY+XYZ+Z+XY+3)
+						// 彩雲の有無(ia=XY+XYZ+Z+X+3)
 						for (int x = 0; x < X; ++x) {
 							for (int y = 0; y < Y; ++y) {
 								for (int z = 0; z < Z; ++z) {
@@ -465,7 +481,7 @@ namespace CarrierSlideRuler.ViewModels {
 							}
 						}
 						++p;
-						// 最小スロ回避制約(ia=XY+XYZ+Z+XY+4)
+						// 最小スロ回避制約(ia=XY+XYZ+Z+X+4)
 						for (int x = 0; x < X; ++x) {
 							var kammusu = Database.GetKammusuData(UnitList[x].Name);
 							if (!kammusu.IsAirGunAttack) continue;
