@@ -1,11 +1,13 @@
 ﻿using CarrierSlideRuler.Models;
 using CarrierSlideRuler.Views;
+using GlpkWrapperCS;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CarrierSlideRuler.ViewModels {
@@ -52,46 +54,7 @@ namespace CarrierSlideRuler.ViewModels {
 						// 装備コンボボックスの中身
 						for (int w = 0; w < kammusu.SlotCount; ++w) {
 							// 一覧を初期化
-							PartsList[w].SelectList = new List<string>();
-							// 線形検索
-							foreach(string name in Database.WeaponNameList) {
-								// 装備の種類を取得
-								var type = Database.GetWeaponData(name).Type;
-								// 艦娘の状態に合わせ、その装備を装備できるかを判定する
-								switch (type) {
-								case WeaponType.PF:
-									if (kammusu.HasPF) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.PA:
-									if (kammusu.HasPA) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.PB:
-									if (kammusu.HasPB) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.JPB:
-									if (kammusu.HasJPB) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.WF:
-									if (kammusu.HasWF) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.WB:
-									if (kammusu.HasWB) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.PS:
-								case WeaponType.PSS:
-									if (kammusu.HasPS) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.PSK:
-									if (kammusu.HasPSK) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.AS:
-									if (kammusu.HasAS) PartsList[w].SelectList.Add(name);
-									break;
-								case WeaponType.Other:
-									PartsList[w].SelectList.Add(name);
-									break;
-								}
-							}
+							PartsList[w].SelectList = Database.GetCanHaveList(kammusu);
 						}
 						NotifyPropertyChanged(nameof(PSelectList1));
 						NotifyPropertyChanged(nameof(PSelectList2));
@@ -107,10 +70,10 @@ namespace CarrierSlideRuler.ViewModels {
 
 			public List<string> USelectList { get => SelectList; }
 
-			public string PName1 { get => PartsList[0].Name; set { PartsList[0].Name = value; act(); } }
-			public string PName2 { get => PartsList[1].Name; set { PartsList[1].Name = value; act(); } }
-			public string PName3 { get => PartsList[2].Name; set { PartsList[2].Name = value; act(); } }
-			public string PName4 { get => PartsList[3].Name; set { PartsList[3].Name = value; act(); } }
+			public string PName1 { get => PartsList[0].Name; set { PartsList[0].Name = value; NotifyPropertyChanged(nameof(PName1)); act(); } }
+			public string PName2 { get => PartsList[1].Name; set { PartsList[1].Name = value; NotifyPropertyChanged(nameof(PName2)); act(); } }
+			public string PName3 { get => PartsList[2].Name; set { PartsList[2].Name = value; NotifyPropertyChanged(nameof(PName3)); act(); } }
+			public string PName4 { get => PartsList[3].Name; set { PartsList[3].Name = value; NotifyPropertyChanged(nameof(PName4)); act(); } }
 			public List<string> PSelectList1 { get => PartsList[0].SelectList; }
 			public List<string> PSelectList2 { get => PartsList[1].SelectList; }
 			public List<string> PSelectList3 { get => PartsList[2].SelectList; }
@@ -180,6 +143,11 @@ namespace CarrierSlideRuler.ViewModels {
 			}
 		}
 
+		// 対地攻撃について
+		public int AntiFieldType { get; set; }
+		// 最適化の方向について
+		public int OptimizeType { get; set; }
+
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
 		private void SetWeaponAction() {
@@ -193,7 +161,306 @@ namespace CarrierSlideRuler.ViewModels {
 		// 「最適化」ボタン
 		public ICommand OptimizeCommand { get; }
 		private void OptimizeAction() {
-			//スタブ
+			int X = Constant.MaxKammusuCount;
+			int Y = Constant.MaxWeaponCount;
+			int Z = Database.WeaponNameList.Count;
+			var weaponList = Database.WeaponNameList;
+			using (var problem = new MipProblem()) {
+				// 最適化の方向
+				problem.ObjDir = ObjectDirection.Maximize;
+				// 制約式の数・名前・範囲
+				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1);
+				{
+					int p = 0;
+					//制空値制約
+					double wantAaPower = EnemyAirPower * 1.5 * 1.1;
+					problem.SetRowBounds(p, BoundsType.Lower, wantAaPower, 0.0);
+					++p;
+					//スロット制約
+					for (int x = 0; x < X; ++x) {
+						for (int y = 0; y < Y; ++y) {
+							problem.SetRowBounds(p, BoundsType.Fixed, 1.0, 1.0);
+							++p;
+						}
+					}
+					//搭載制約
+					for (int x = 0; x < X; ++x) {
+						for (int y = 0; y < Y; ++y) {
+							for (int z = 0; z < Z; ++z) {
+								var wType = Database.GetWeaponData(weaponList[z]).Type;
+								if (!Database.HasWeaponjudge(UnitList[x].Name, weaponList[z]))
+									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+								else if ((wType == WeaponType.PB || wType == WeaponType.JPB) && (AntiFieldType == 1))
+									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+								else
+									problem.SetRowBounds(p, BoundsType.Upper, 0.0, 1.0);
+								++p;
+							}
+						}
+					}
+					// 所持数制約
+					for (int z = 0; z < Z; ++z) {
+						int wId = Database.GetWeaponData(weaponList[z]).Id;
+						int count = Database.GetHaveWeaponCount(wId);
+						problem.SetRowBounds(p, BoundsType.Upper, 0.0, 1.0 * count);
+						++p;
+					}
+					// 対地攻撃OFF制約
+					double temp = (AntiFieldType == 2 ? 1.0 : 0.0);
+					for (int x = 0; x < X; ++x) {
+						for (int y = 0; y < Y; ++y) {
+							problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+							++p;
+						}
+					}
+					// 航空戦火力
+					problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+					++p;
+					// 砲撃戦火力
+					double temp2 = 0.0;
+					for(int x = 0; x < X; ++x) {
+						var kammusu = Database.GetKammusuData(UnitList[x].Name);
+						if (kammusu.IsAirGunAttack) temp2 += 55.0 + 1.5 * kammusu.Attack * 1.5;
+					}
+					problem.SetRowBounds(p, BoundsType.Fixed, -temp2, -temp2);
+				}
+				// 変数の数・名前・範囲
+				problem.AddColumns(X * Y * Z + 1 + 1);
+				{
+					int p = 0;
+					for (int x = 0; x < X; ++x) {
+						for (int y = 0; y < Y; ++y) {
+							for (int z = 0; z < Z; ++z) {
+								problem.SetColumnBounds(p, BoundsType.Fixed, 0.0, 1.0);
+								problem.ColumnKind[p] = VariableKind.Binary;
+								problem.ColumnName[p] = $"s_{(x + 1)}_{(y + 1)}_{(z + 1)}";
+								++p;
+							}
+						}
+					}
+					problem.SetColumnBounds(p, BoundsType.Free, 0.0, 0.0);
+					problem.ColumnName[p] = "Attack_A";
+					++p;
+					problem.SetColumnBounds(p, BoundsType.Free, 0.0, 0.0);
+					problem.ColumnName[p] = "Attack_G";
+					++p;
+				}
+				// 目的関数の係数
+				{
+					int p = 0;
+					for (int x = 0; x < X; ++x) {
+						for (int y = 0; y < Y; ++y) {
+							for (int z = 0; z < Z; ++z) {
+								problem.ObjCoef[p] = 0.0;
+								++p;
+							}
+						}
+					}
+					problem.ObjCoef[p] = (OptimizeType == 1 ? 2.0 : 1.0);
+					++p;
+					problem.ObjCoef[p] = (OptimizeType == 2 ? 2.0 : 1.0);
+					++p;
+				}
+				// 制約式の係数
+				{
+					// 記録用のリストを用意
+					var ia = new List<int>();
+					var ja = new List<int>();
+					var ar = new List<double>();
+					// 係数を追加していく
+					{
+						// 制空値制約(ia=0)
+						int p = 0;
+						for (int x = 0; x < X; ++x) {
+							var kammusu = Database.GetKammusuData(UnitList[x].Name);
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									var weapon = Database.GetWeaponData(weaponList[z]);
+									ia.Add(0);
+									ja.Add(p);
+									if (!weapon.IsStage1 || kammusu.Airs[y] == 0) {
+										ar.Add(0.0);
+									}
+									else {
+										double temp = Math.Sqrt(kammusu.Airs[y]) * weapon.AntiAir + (Math.Sqrt(100 / 10) + Constant.AntiAirBonus(weapon.Type));
+										ar.Add(temp);
+									}
+									++p;
+								}
+							}
+						}
+					}
+					{
+						// スロット制約(ia=1～XY)
+						int p = 1;
+						for (int x = 0; x < X; ++x) {
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									ia.Add(p);
+									ja.Add((x * Y + y) * Z + z);
+									ar.Add(1.0);
+								}
+								++p;
+							}
+						}
+					}
+					{
+						// 搭載制約(ia=XY+1～XY+XYZ)
+						int p = X * Y + 1;
+						for (int x = 0; x < X; ++x) {
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									ia.Add(p);
+									ja.Add((x * Y + y) * Z + z);
+									ar.Add(1.0);
+									++p;
+								}
+							}
+						}
+					}
+					{
+						// 所持数制約(ia=XY+XYZ+1～XY+XYZ+Z)
+						int p = X * Y + X * Y * Z + 1;
+						for (int z = 0; z < Z; ++z) {
+							for (int x = 0; x < X; ++x) {
+								for (int y = 0; y < Y; ++y) {
+									ia.Add(p);
+									ja.Add((x * Y + y) * Z + z);
+									ar.Add(1.0);
+								}
+							}
+							++p;
+						}
+					}
+					{
+						// 対地攻撃OFF制約(ia=XY+XYZ+Z+1～XY+XYZ+Z+XY)
+						int p = X * Y + X * Y * Z + Z + 1;
+						for (int x = 0; x < X; ++x) {
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									ia.Add(p);
+									ja.Add((x * Y + y) * Z + z);
+									var weapon = Database.GetWeaponData(weaponList[z]);
+									if (weapon.Type == WeaponType.PB || weapon.Type == WeaponType.JPB)
+										ar.Add(1.0);
+									else
+										ar.Add(0.0);
+								}
+								++p;
+							}
+						}
+					}
+					{
+						// 航空戦火力(ia=XY+XYZ+Z+XY+1)
+						int p = X * Y + X * Y * Z + Z + X * Y + 1;
+						for (int x = 0; x < X; ++x) {
+							var kammusu = Database.GetKammusuData(UnitList[x].Name);
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									ia.Add(p);
+									ja.Add((x * Y + y) * Z + z);
+									var weapon = Database.GetWeaponData(weaponList[z]);
+									if (!weapon.IsStage3 || kammusu.Airs[y] == 0)
+										ar.Add(0.0);
+									else {
+										double temp = Math.Sqrt(kammusu.Airs[y]) * (weapon.Bomb + weapon.Torpedo) + (Math.Sqrt(100 / 10) + 25);
+										switch (weapon.Type) {
+										case WeaponType.PA:
+											temp *= 1.15;
+											break;
+										case WeaponType.JPB:
+											temp *= 1.0 / Math.Sqrt(2);
+											break;
+										}
+										ar.Add(temp);
+									}
+								}
+							}
+						}
+						ia.Add(p);
+						ja.Add(X*Y*Z);
+						ar.Add(-1.0);
+						++p;
+						// 砲撃戦火力(ia=XY+XYZ+Z+XY+2)
+						for (int x = 0; x < X; ++x) {
+							var kammusu = Database.GetKammusuData(UnitList[x].Name);
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									ia.Add(p);
+									ja.Add((x * Y + y) * Z + z);
+									var weapon = Database.GetWeaponData(weaponList[z]);
+									if (!kammusu.IsAirGunAttack || !weapon.IsStage3)
+										ar.Add(0.0);
+									else {
+										switch (weapon.Type) {
+										case WeaponType.PA:
+											ar.Add(1.5 * weapon.Torpedo);
+											break;
+										case WeaponType.PB:
+										case WeaponType.JPB:
+											ar.Add(1.95 * weapon.Bomb);
+											break;
+										default:
+											ar.Add(0.0);
+											break;
+										}
+									}
+								}
+							}
+						}
+						ia.Add(p);
+						ja.Add(X * Y * Z + 1);
+						ar.Add(-1.0);
+						++p;
+					}
+					problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
+				}
+				// 最適化を実行
+				var result = problem.BranchAndCut(false);
+				// 結果を読み取る
+				if(result == SolverResult.OK) {
+					// スコア
+					int offset = X * Y * Z;
+					string message = $"総攻撃スコア：{problem.MipObjValue}\n航空攻撃スコア：{problem.MipColumnValue[offset]}\n航空砲撃戦スコア：{problem.MipColumnValue[offset + 1]}\n";
+					// 正解となる装備配置
+					var answer = new List<string>();
+					for (int x = 0; x < X; ++x) {
+						for (int y = 0; y < Y; ++y) {
+							for (int z = 0; z < Z; ++z) {
+								int index = (x * Y + y) * Z + z;
+								// 値が1なら、それが選択されたとみなす
+								if (Math.Abs(problem.MipColumnValue[index]) >= 0.0000001) {
+									answer.Add(weaponList[z]);
+								}
+							}
+						}
+					}
+					for (int x = 0; x < X; ++x) {
+						message += $"{UnitList[x].Name}→";
+						for (int y = 0; y < Y; ++y) {
+							message += $"{answer[x * Y + y]},";
+						}
+						message += "\n";
+					}
+					// ダイアログで結果を表示
+					MessageBox.Show(message, "CarrierSlideRuler", MessageBoxButton.OK, MessageBoxImage.Information);
+					// 画面に反映する
+					int p = 0;
+					for(int x = 0; x < X; ++x) {
+						UnitList[x].PName1 = answer[p];
+						++p;
+						UnitList[x].PName2 = answer[p];
+						++p;
+						UnitList[x].PName3 = answer[p];
+						++p;
+						UnitList[x].PName4 = answer[p];
+						++p;
+					}
+				}
+				else {
+					MessageBox.Show("実行可能解が出せませんでした。", "CarrierSlideRuler", MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
+			}
 		}
 
 		// コンストラクタ
@@ -221,6 +488,7 @@ namespace CarrierSlideRuler.ViewModels {
 			}
 			#endregion
 			EnemyAirPower = 0;
+			AntiFieldType = 0;
 		}
 	}
 }

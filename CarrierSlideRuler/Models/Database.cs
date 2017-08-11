@@ -130,6 +130,7 @@ namespace CarrierSlideRuler.Models {
 					haveWeaponDictionary[id] = 0;
 				}
 			}
+			haveWeaponDictionary[weaponDictionary["なし"].Id] = 99;
 			#endregion
 		}
 		// 艦娘名のリスト
@@ -152,14 +153,101 @@ namespace CarrierSlideRuler.Models {
 		public static WeaponData GetWeaponData(string name) {
 			return weaponDictionary[name];
 		}
+		// 所持可能な装備名リスト
+		public static List<string> GetCanHaveList(KammusuData kammusu) {
+			// 一覧を初期化
+			var list = new List<string>();
+			// 線形検索
+			foreach (var pair in weaponDictionary) {
+				// 装備の種類を取得
+				var name = pair.Value.Name;
+				var type = pair.Value.Type;
+				// 艦娘の状態に合わせ、その装備を装備できるかを判定する
+				switch (type) {
+				case WeaponType.PF:
+					if (kammusu.HasPF) list.Add(name);
+					break;
+				case WeaponType.PA:
+					if (kammusu.HasPA) list.Add(name);
+					break;
+				case WeaponType.PB:
+					if (kammusu.HasPB) list.Add(name);
+					break;
+				case WeaponType.JPB:
+					if (kammusu.HasJPB) list.Add(name);
+					break;
+				case WeaponType.WF:
+					if (kammusu.HasWF) list.Add(name);
+					break;
+				case WeaponType.WB:
+					if (kammusu.HasWB) list.Add(name);
+					break;
+				case WeaponType.PS:
+				case WeaponType.PSS:
+					if (kammusu.HasPS) list.Add(name);
+					break;
+				case WeaponType.PSK:
+					if (kammusu.HasPSK) list.Add(name);
+					break;
+				case WeaponType.AS:
+					if (kammusu.HasAS) list.Add(name);
+					break;
+				case WeaponType.Other:
+					list.Add(name);
+					break;
+				}
+			}
+			return list;
+		}
 		// 所持装備データ
 		public static int GetHaveWeaponCount(int id) {
+			// 所持数データを参照
 			if (haveWeaponDictionary.ContainsKey(id)) {
 				return haveWeaponDictionary[id];
 			}
 			else {
 				return 0;
 			}
+		}
+		// 艦娘Xが装備Yを持てるか？
+		public static bool HasWeaponjudge(string kName, string wName) {
+			var kammusu = GetKammusuData(kName);
+			var weapon = GetWeaponData(wName);
+			switch (weapon.Type) {
+			case WeaponType.PF:
+				if (kammusu.HasPF) return true;
+				break;
+			case WeaponType.PA:
+				if (kammusu.HasPA) return true;
+				break;
+			case WeaponType.PB:
+				if (kammusu.HasPB) return true;
+				break;
+			case WeaponType.JPB:
+				if (kammusu.HasJPB) return true;
+				break;
+			case WeaponType.WF:
+				if (kammusu.HasWF) return true;
+				break;
+			case WeaponType.WB:
+				if (kammusu.HasWB) return true;
+				break;
+			case WeaponType.PS:
+			case WeaponType.PSS:
+				if (kammusu.HasPS) return true;
+				break;
+			case WeaponType.PSK:
+				if (kammusu.HasPSK) return true;
+				break;
+			case WeaponType.AS:
+				if (kammusu.HasAS) return true;
+				break;
+			case WeaponType.Other:
+				return true;
+			default:
+				return false;
+			}
+			return false;
 		}
 	}
 	// 艦娘データの内部表現
@@ -218,6 +306,10 @@ namespace CarrierSlideRuler.Models {
 			HasPSK = hasPSK;
 			HasAS = hasAS;
 		}
+		// 砲撃戦で空撃するか？
+		public bool IsAirGunAttack {
+			get => (Type == FleetType.CV || Type == FleetType.CVL || Type == FleetType.ACV || Name == "速吸改");
+		}
 	}
 	// 装備データの内部表現
 	class WeaponData {
@@ -260,6 +352,10 @@ namespace CarrierSlideRuler.Models {
 		public bool IsStage1 {
 			get => (Type == WeaponType.PF || Type == WeaponType.PA || Type == WeaponType.PB
 				|| Type == WeaponType.JPB || Type == WeaponType.WF || Type == WeaponType.WB);
+		}
+		// Stage3(航空攻撃)に参加するか？
+		public bool IsStage3 {
+			get => (Type == WeaponType.PA || Type == WeaponType.PB || Type == WeaponType.JPB || Type == WeaponType.WB);
 		}
 	}
 }
