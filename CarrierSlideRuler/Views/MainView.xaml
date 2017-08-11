@@ -59,6 +59,7 @@
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition Width="auto" />
 				<ColumnDefinition Width="auto" />
+				<ColumnDefinition Width="auto" />
 			</Grid.ColumnDefinitions>
 			<Button Grid.Column="0" Content="装備..." Command="{Binding SetWeaponCommand}" Margin="5,5,5,5" Padding="10,0,10,0" />
 			<TextBlock Grid.Column="1" Margin="5,5,5,5" VerticalAlignment="Center" Text="必要制空値：" />
@@ -79,7 +80,8 @@
 				<ComboBoxItem Content="対地攻撃ON" />
 				<ComboBoxItem Content="対地攻撃OFF" />
 			</ComboBox>
-			<Button Grid.Column="6" Content="最適化" Command="{Binding OptimizeCommand}" Margin="5,5,5,5" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+			<CheckBox Grid.Column="6" Content="彩雲" IsChecked="{Binding SaiunCheck, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+			<Button Grid.Column="7" Content="最適化" Command="{Binding OptimizeCommand}" Margin="5,5,5,5" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 		</Grid>
 	</Grid>
 </Window>

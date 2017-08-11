@@ -149,6 +149,8 @@ namespace CarrierSlideRuler.ViewModels {
 		public int OptimizeType { get; set; }
 		// 制空状態について
 		public int AirStatusMode { get; set; }
+		// 彩雲の有無
+		public bool SaiunCheck { get; set; }
 
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
@@ -176,7 +178,7 @@ namespace CarrierSlideRuler.ViewModels {
 				// 最適化の方向
 				problem.ObjDir = ObjectDirection.Maximize;
 				// 制約式の数・名前・範囲
-				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1);
+				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1);
 				{
 					int p = 0;
 					//制空値制約
@@ -252,6 +254,9 @@ namespace CarrierSlideRuler.ViewModels {
 						if (kammusu.IsAirGunAttack) temp2 += 55.0 + 1.5 * kammusu.Attack * 1.5;
 					}
 					problem.SetRowBounds(p, BoundsType.Fixed, -temp2, -temp2);
+					++p;
+					// 彩雲の有無
+					problem.SetRowBounds(p, BoundsType.Lower, (SaiunCheck ? 1.0 : 0.0), 0.0);
 				}
 				// 変数の数・名前・範囲
 				problem.AddColumns(X * Y * Z + 1 + 1);
@@ -441,9 +446,23 @@ namespace CarrierSlideRuler.ViewModels {
 						ja.Add(X * Y * Z + 1);
 						ar.Add(-1.0);
 						++p;
+						// 彩雲の有無(ia=XY+XYZ+Z+XY+3)
+						for (int x = 0; x < X; ++x) {
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									var weapon = Database.GetWeaponData(weaponList[z]);
+									if(weapon.Type == WeaponType.PSS) {
+										ia.Add(p);
+										ja.Add((x * Y + y) * Z + z);
+										ar.Add(1.0);
+									}
+								}
+							}
+						}
 					}
 					problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
 				}
+				string hoge = problem.ToLpString();
 				// 最適化を実行
 				var result = await Task.Run(() => problem.BranchAndCut(false));
 				// 結果を読み取る
@@ -522,6 +541,7 @@ namespace CarrierSlideRuler.ViewModels {
 			AntiFieldType = 0;
 			OptimizeButtonState = true;
 			AirStatusMode = 1;
+			SaiunCheck = true;
 		}
 	}
 }
