@@ -158,6 +158,8 @@ namespace CarrierSlideRuler.ViewModels {
 		public bool SaiunCheck { get; set; }
 		// 最小スロ回避
 		public bool MinSlotCheck { get; set; }
+		// 噴式使用禁止
+		public bool NoUseJPB { get; set; }
 
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
@@ -238,6 +240,9 @@ namespace CarrierSlideRuler.ViewModels {
 									else
 										problem.SetRowBounds(p, BoundsType.Fixed, 1.0, 1.0);
 								}
+								// 噴式使用禁止なら、噴式は「＝0」
+								else if(NoUseJPB && wType == WeaponType.JPB)
+									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
 								// 対地攻撃ON状態なら、艦爆や噴式は「＝0」
 								else if ((wType == WeaponType.PB || wType == WeaponType.JPB) && (AntiFieldType == 1))
 									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
