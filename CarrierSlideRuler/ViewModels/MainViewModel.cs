@@ -190,11 +190,19 @@ namespace CarrierSlideRuler.ViewModels {
 					}
 					//搭載制約
 					for (int x = 0; x < X; ++x) {
+						var kammusu = Database.GetKammusuData(UnitList[x].Name);
 						for (int y = 0; y < Y; ++y) {
 							for (int z = 0; z < Z; ++z) {
-								var wType = Database.GetWeaponData(weaponList[z]).Type;
+								var weapon = Database.GetWeaponData(weaponList[z]);
+								var wType = weapon.Type;
 								if (!Database.HasWeaponjudge(UnitList[x].Name, weaponList[z]))
 									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+								else if (kammusu.SlotCount <= y) {
+									if (weapon.Name != "なし")
+										problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
+									else
+										problem.SetRowBounds(p, BoundsType.Fixed, 1.0, 1.0);
+								}
 								else if ((wType == WeaponType.PB || wType == WeaponType.JPB) && (AntiFieldType == 1))
 									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
 								else
