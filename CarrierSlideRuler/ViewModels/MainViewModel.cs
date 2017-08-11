@@ -160,7 +160,12 @@ namespace CarrierSlideRuler.ViewModels {
 
 		// 「最適化」ボタン
 		public ICommand OptimizeCommand { get; }
-		private void OptimizeAction() {
+		bool optimizeButtonState;
+		public bool OptimizeButtonState { get => optimizeButtonState; set { optimizeButtonState = value; NotifyPropertyChanged(nameof(OptimizeButtonState)); } }
+		private async void OptimizeAction() {
+			OptimizeButtonState = false;
+			Title = "CarrierSlideRuler(最適化中...)";
+			//
 			int X = Constant.MaxKammusuCount;
 			int Y = Constant.MaxWeaponCount;
 			int Z = Database.WeaponNameList.Count;
@@ -416,7 +421,7 @@ namespace CarrierSlideRuler.ViewModels {
 					problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
 				}
 				// 最適化を実行
-				var result = problem.BranchAndCut(false);
+				var result = await Task.Run(() => problem.BranchAndCut(false));
 				// 結果を読み取る
 				if(result == SolverResult.OK) {
 					// スコア
@@ -461,6 +466,8 @@ namespace CarrierSlideRuler.ViewModels {
 					MessageBox.Show("実行可能解が出せませんでした。", "CarrierSlideRuler", MessageBoxButton.OK, MessageBoxImage.Warning);
 				}
 			}
+			OptimizeButtonState = true;
+			SetTitleBar();
 		}
 
 		// コンストラクタ
@@ -489,6 +496,7 @@ namespace CarrierSlideRuler.ViewModels {
 			#endregion
 			EnemyAirPower = 0;
 			AntiFieldType = 0;
+			OptimizeButtonState = true;
 		}
 	}
 }

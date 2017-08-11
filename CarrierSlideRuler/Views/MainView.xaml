@@ -72,7 +72,7 @@
 				<ComboBoxItem Content="対地攻撃ON" />
 				<ComboBoxItem Content="対地攻撃OFF" />
 			</ComboBox>
-			<Button Grid.Column="5" Content="最適化" Command="{Binding OptimizeCommand}" Margin="5,5,5,5" Padding="10,0,10,0" />
+			<Button Grid.Column="5" Content="最適化" Command="{Binding OptimizeCommand}" Margin="5,5,5,5" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 		</Grid>
 	</Grid>
 </Window>
