@@ -151,6 +151,8 @@ namespace CarrierSlideRuler.ViewModels {
 		public int AirStatusMode { get; set; }
 		// 彩雲の有無
 		public bool SaiunCheck { get; set; }
+		// 最小スロ回避
+		public bool MinSlotCheck { get; set; }
 
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
@@ -178,7 +180,7 @@ namespace CarrierSlideRuler.ViewModels {
 				// 最適化の方向
 				problem.ObjDir = ObjectDirection.Maximize;
 				// 制約式の数・名前・範囲
-				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1);
+				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1+1);
 				{
 					int p = 0;
 					//制空値制約
@@ -257,6 +259,9 @@ namespace CarrierSlideRuler.ViewModels {
 					++p;
 					// 彩雲の有無
 					problem.SetRowBounds(p, BoundsType.Lower, (SaiunCheck ? 1.0 : 0.0), 0.0);
+					++p;
+					// 最小スロ回避制約
+					problem.SetRowBounds(p, BoundsType.Upper, 0.0, (MinSlotCheck ? 0.0 : X * Y * Z + 1));
 				}
 				// 変数の数・名前・範囲
 				problem.AddColumns(X * Y * Z + 1 + 1);
@@ -459,6 +464,21 @@ namespace CarrierSlideRuler.ViewModels {
 								}
 							}
 						}
+						++p;
+						// 最小スロ回避制約(ia=XY+XYZ+Z+XY+4)
+						for (int x = 0; x < X; ++x) {
+							var kammusu = Database.GetKammusuData(UnitList[x].Name);
+							if (!kammusu.IsAirGunAttack) continue;
+							int y = kammusu.SlotCount - 1;
+							for (int z = 0; z < Z; ++z) {
+								var weapon = Database.GetWeaponData(weaponList[z]);
+								if (weapon.IsStage3) {
+									ia.Add(p);
+									ja.Add((x * Y + y) * Z + z);
+									ar.Add(1.0);
+								}
+							}
+						}
 					}
 					problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
 				}
@@ -542,6 +562,7 @@ namespace CarrierSlideRuler.ViewModels {
 			OptimizeButtonState = true;
 			AirStatusMode = 1;
 			SaiunCheck = true;
+			MinSlotCheck = true;
 		}
 	}
 }
