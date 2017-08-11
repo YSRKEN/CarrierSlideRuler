@@ -209,6 +209,10 @@ namespace CarrierSlideRuler.Models {
 				return 0;
 			}
 		}
+		// 装備データを更新
+		public static void SetHaveWeaponCount(string name, int count) {
+			haveWeaponDictionary[weaponDictionary[name].Id] = count;
+		}
 		// 艦娘Xが装備Yを持てるか？
 		public static bool HasWeaponjudge(string kName, string wName) {
 			var kammusu = GetKammusuData(kName);

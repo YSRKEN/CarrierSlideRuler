@@ -12,7 +12,7 @@ namespace CarrierSlideRuler.ViewModels {
 			Action act;
 			public string Name { get; set; }
 			int count;
-			public int Count { get => count; set { count = value; act(); } }
+			public int Count { get => count; set { count = value; Database.SetHaveWeaponCount(Name, count); act(); } }
 			public List<string> CountList { get; set; }
 
 			public HaveWeapon(Action act_) {
