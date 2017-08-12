@@ -506,7 +506,7 @@ namespace CarrierSlideRuler.ViewModels {
 					}
 					problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
 				}
-				string hoge = problem.ToLpString();
+				//string hoge = problem.ToLpString();
 				// 最適化を実行
 				var result = await Task.Run(() => problem.BranchAndCut(false));
 				// 結果を読み取る
