@@ -420,6 +420,7 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
+									double coeff = 1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100;
 									if (!weapon.IsStage3 || kammusu.Airs[y] == 0)
 										ar.Add(0.0);
 									else {
@@ -432,7 +433,7 @@ namespace CarrierSlideRuler.ViewModels {
 											temp *= 1.0 / Math.Sqrt(2);
 											break;
 										}
-										ar.Add(temp);
+										ar.Add(temp * coeff);
 									}
 								}
 							}
@@ -449,16 +450,18 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
+									double coeff = 1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100;
 									if (!kammusu.IsAirGunAttack || !weapon.IsStage3)
 										ar.Add(0.0);
 									else {
 										switch (weapon.Type) {
 										case WeaponType.PA:
-											ar.Add(1.5 * weapon.Torpedo);
+											
+											ar.Add(1.5 * weapon.Torpedo * coeff);
 											break;
 										case WeaponType.PB:
 										case WeaponType.JPB:
-											ar.Add(1.95 * weapon.Bomb);
+											ar.Add(1.95 * weapon.Bomb * coeff);
 											break;
 										default:
 											ar.Add(0.0);
