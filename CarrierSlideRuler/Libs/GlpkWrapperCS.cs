@@ -62,12 +62,13 @@ namespace GlpkWrapperCS {
 				smcp.msg_lev = GLPK.GLP_MSG_OFF;
 			return (SolverResult)GLPK.glp_simplex(problem, smcp);
 		}
-		public SolverResult BranchAndCut(bool messageFlg = true) {
+		public SolverResult BranchAndCut(bool messageFlg = true, int timeLimit = 315360000) {
 			Simplex(false);
 			glp_iocp iocp = new glp_iocp();
 			GLPK.glp_init_iocp(iocp);
 			if(!messageFlg)
 				iocp.msg_lev = GLPK.GLP_MSG_OFF;
+			iocp.tm_lim = timeLimit * 1000;
 			return (SolverResult)GLPK.glp_intopt(problem, iocp);
 		}
 		// 数値を符号付きで文字化する

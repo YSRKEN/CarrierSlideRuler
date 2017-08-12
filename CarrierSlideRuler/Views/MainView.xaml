@@ -121,7 +121,7 @@
 					<ComboBoxItem Content="10分 " />
 					<ComboBoxItem Content="1時間" />
 					<ComboBoxItem Content="1日  " />
-					<ComboBoxItem Content="100年" />
+					<ComboBoxItem Content="3週間" />
 				</ComboBox>
 			</Grid>
 			<Grid Grid.Row="1">
