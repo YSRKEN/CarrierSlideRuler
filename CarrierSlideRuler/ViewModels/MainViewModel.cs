@@ -160,6 +160,8 @@ namespace CarrierSlideRuler.ViewModels {
 		public bool MinSlotCheck { get; set; }
 		// 噴式使用禁止
 		public bool NoUseJPB { get; set; }
+		// 時間制限
+		public int TimeLimitType { get; set; }
 
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
@@ -587,6 +589,7 @@ namespace CarrierSlideRuler.ViewModels {
 			AirStatusMode = 1;
 			SaiunCheck = true;
 			MinSlotCheck = true;
+			TimeLimitType = 2;
 		}
 	}
 }
