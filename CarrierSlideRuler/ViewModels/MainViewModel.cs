@@ -160,6 +160,8 @@ namespace CarrierSlideRuler.ViewModels {
 		public bool MinSlotCheck { get; set; }
 		// 噴式使用禁止
 		public bool NoUseJPB { get; set; }
+		// 時間制限
+		public int TimeLimitType { get; set; }
 
 		// 「装備...」ボタン
 		public ICommand SetWeaponCommand { get; }
@@ -456,15 +458,14 @@ namespace CarrierSlideRuler.ViewModels {
 									else {
 										switch (weapon.Type) {
 										case WeaponType.PA:
-											
-											ar.Add(1.5 * weapon.Torpedo * coeff);
+											ar.Add(1.5 * weapon.Torpedo * coeff + weapon.Attack);
 											break;
 										case WeaponType.PB:
 										case WeaponType.JPB:
-											ar.Add(1.95 * weapon.Bomb * coeff);
+											ar.Add(1.95 * weapon.Bomb * coeff + weapon.Attack);
 											break;
 										default:
-											ar.Add(0.0);
+											ar.Add(weapon.Attack);
 											break;
 										}
 									}
@@ -508,9 +509,10 @@ namespace CarrierSlideRuler.ViewModels {
 				}
 				//string hoge = problem.ToLpString();
 				// 最適化を実行
-				var result = await Task.Run(() => problem.BranchAndCut(false));
+				var timeLimit = new int[] { 10,30,60,600,3600,86400, 86400 * 21 };
+				var result = await Task.Run(() => problem.BranchAndCut(false, timeLimit[TimeLimitType]));
 				// 結果を読み取る
-				if(result == SolverResult.OK) {
+				if(result == SolverResult.OK || result == SolverResult.ErrorTimeLimit) {
 					// スコア
 					int offset = X * Y * Z;
 					string message = $"総攻撃スコア：{problem.MipObjValue}\n航空攻撃スコア：{problem.MipColumnValue[offset]}\n航空砲撃戦スコア：{problem.MipColumnValue[offset + 1]}\n";
@@ -534,6 +536,9 @@ namespace CarrierSlideRuler.ViewModels {
 						}
 						message += "\n";
 					}
+					// 通知
+					if (result == SolverResult.ErrorTimeLimit)
+						message += "\n※時間制限が来たので計算を打ち切りました。\n";
 					// ダイアログで結果を表示
 					MessageBox.Show(message, "CarrierSlideRuler", MessageBoxButton.OK, MessageBoxImage.Information);
 					// 画面に反映する
@@ -587,6 +592,7 @@ namespace CarrierSlideRuler.ViewModels {
 			AirStatusMode = 1;
 			SaiunCheck = true;
 			MinSlotCheck = true;
+			TimeLimitType = 2;
 		}
 	}
 }

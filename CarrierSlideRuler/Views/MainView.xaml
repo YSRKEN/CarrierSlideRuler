@@ -91,6 +91,8 @@
 					<ColumnDefinition Width="auto" />
 					<ColumnDefinition Width="auto" />
 					<ColumnDefinition Width="auto" />
+					<ColumnDefinition Width="auto" />
+					<ColumnDefinition Width="auto" />
 				</Grid.ColumnDefinitions>
 				<Button Grid.Column="0" Content="装備..." Command="{Binding SetWeaponCommand}" Margin="5,5,5,5" Padding="10,0,10,0" />
 				<TextBlock Grid.Column="1" Margin="5,5,5,5" VerticalAlignment="Center" Text="必要制空値：" />
@@ -110,6 +112,16 @@
 					<ComboBoxItem Content="対地指定なし" />
 					<ComboBoxItem Content="対地攻撃ON" />
 					<ComboBoxItem Content="対地攻撃OFF" />
+				</ComboBox>
+				<TextBlock Grid.Column="6" Margin="5,5,5,5" VerticalAlignment="Center" Text="計算時間の上限：" />
+				<ComboBox Grid.Column="7" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding TimeLimitType, UpdateSourceTrigger=PropertyChanged}">
+					<ComboBoxItem Content="10秒 " />
+					<ComboBoxItem Content="30秒 " />
+					<ComboBoxItem Content="1分  " />
+					<ComboBoxItem Content="10分 " />
+					<ComboBoxItem Content="1時間" />
+					<ComboBoxItem Content="1日  " />
+					<ComboBoxItem Content="3週間" />
 				</ComboBox>
 			</Grid>
 			<Grid Grid.Row="1">
