@@ -458,15 +458,14 @@ namespace CarrierSlideRuler.ViewModels {
 									else {
 										switch (weapon.Type) {
 										case WeaponType.PA:
-											
-											ar.Add(1.5 * weapon.Torpedo * coeff);
+											ar.Add(1.5 * weapon.Torpedo * coeff + weapon.Attack);
 											break;
 										case WeaponType.PB:
 										case WeaponType.JPB:
-											ar.Add(1.95 * weapon.Bomb * coeff);
+											ar.Add(1.95 * weapon.Bomb * coeff + weapon.Attack);
 											break;
 										default:
-											ar.Add(0.0);
+											ar.Add(weapon.Attack);
 											break;
 										}
 									}
