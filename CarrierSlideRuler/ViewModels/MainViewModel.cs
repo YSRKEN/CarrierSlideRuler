@@ -436,7 +436,7 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
-									double coeff = 1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100;
+									double coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
 									if (!weapon.IsStage3 || kammusu.Airs[y] == 0)
 										ar.Add(0.0);
 									else {
@@ -466,7 +466,7 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
-									double coeff = 1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100;
+									double coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
 									if (!kammusu.IsAirGunAttack || !weapon.IsStage3)
 										ar.Add(0.0);
 									else {
