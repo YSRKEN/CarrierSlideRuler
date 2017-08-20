@@ -4,7 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:CarrierSlideRuler.Views"
-		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="810" MaxHeight="400" MinWidth="810" ResizeMode="CanResize" Topmost="True">
+		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="950" MaxHeight="400" MinWidth="950" ResizeMode="CanResize" Topmost="True">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition  />
@@ -26,6 +26,13 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize1}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="固定" Width="35">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -37,6 +44,13 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding PSelectList2}" SelectedItem="{Binding PName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg2}" Height="30" FontSize="15" VerticalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize2}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -54,6 +68,13 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize3}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 				<DataGridTemplateColumn Header="固定" Width="35">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -65,6 +86,13 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding PSelectList4}" SelectedItem="{Binding PName4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg4}" Height="30" FontSize="15" VerticalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize4}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
