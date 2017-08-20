@@ -61,6 +61,15 @@ namespace CarrierSlideRuler.ViewModels {
 						NotifyPropertyChanged(nameof(PSelectList2));
 						NotifyPropertyChanged(nameof(PSelectList3));
 						NotifyPropertyChanged(nameof(PSelectList4));
+						// 搭載数
+						pSlotSize = Enumerable.Repeat(0, Constant.MaxWeaponCount).ToList();
+						for(int w = 0; w < Constant.MaxWeaponCount; ++w) {
+							pSlotSize[w] = kammusu.Airs[w];
+						}
+						NotifyPropertyChanged(nameof(PSlotSize1));
+						NotifyPropertyChanged(nameof(PSlotSize2));
+						NotifyPropertyChanged(nameof(PSlotSize3));
+						NotifyPropertyChanged(nameof(PSlotSize4));
 					}
 					// SetTitleBarを走らせる
 					act();
@@ -68,6 +77,7 @@ namespace CarrierSlideRuler.ViewModels {
 			}
 			public List<string> SelectList { get; set; }
 			public List<Parts> PartsList;
+			public List<int> pSlotSize;
 
 			public List<string> USelectList { get => SelectList; }
 
@@ -83,6 +93,10 @@ namespace CarrierSlideRuler.ViewModels {
 			public bool PFlg2 { get => PartsList[1].Flg; }
 			public bool PFlg3 { get => PartsList[2].Flg; }
 			public bool PFlg4 { get => PartsList[3].Flg; }
+			public int PSlotSize1 { get => pSlotSize[0]; }
+			public int PSlotSize2 { get => pSlotSize[1]; }
+			public int PSlotSize3 { get => pSlotSize[2]; }
+			public int PSlotSize4 { get => pSlotSize[3]; }
 			public bool PCheck1 { get => PartsList[0].FixedFlg; set { PartsList[0].FixedFlg = value; } }
 			public bool PCheck2 { get => PartsList[1].FixedFlg; set { PartsList[1].FixedFlg = value; }}
 			public bool PCheck3 { get => PartsList[2].FixedFlg; set { PartsList[2].FixedFlg = value; }}
@@ -422,7 +436,7 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
-									double coeff = 1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100;
+									double coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
 									if (!weapon.IsStage3 || kammusu.Airs[y] == 0)
 										ar.Add(0.0);
 									else {
@@ -452,7 +466,7 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
-									double coeff = 1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100;
+									double coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
 									if (!kammusu.IsAirGunAttack || !weapon.IsStage3)
 										ar.Add(0.0);
 									else {

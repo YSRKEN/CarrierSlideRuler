@@ -14,11 +14,12 @@ Aircraft Carrier Optimizer for Kantai Collection
 GPLv3
 
 ## バージョン履歴
+- Ver.1.0.2(2017/08/20) …… UIを改良、搭載数を表示するようにした、より適した配置を算出できるよう改良
 - Ver.1.0.1(2017/08/16) …… 一定時間で計算を打ち切れるようにする設定を追加
 - Ver.1.0.0(2017/08/12) …… 初版
 
 ## 使い方
-![HowToUse](https://user-images.githubusercontent.com/3734392/29352269-093aaac8-82a1-11e7-8a90-2b191c229f6c.png)
+![HowToUse](https://user-images.githubusercontent.com/3734392/29494508-cdafbf4a-85e6-11e7-910c-fa4f7112d3df.png)
 
 - 制空計算したい場合は、コンボボックスで艦名と装備名を選択してください
 - 装備を自動で最適化させたい場合は、「最適化」ボタンをクリックしてください。   

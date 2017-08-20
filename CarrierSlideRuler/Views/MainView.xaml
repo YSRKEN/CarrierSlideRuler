@@ -4,7 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:CarrierSlideRuler.Views"
-		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="750" MaxHeight="400" MinWidth="750" ResizeMode="CanResize" Topmost="True">
+		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="950" MaxHeight="400" MinWidth="950" ResizeMode="CanResize" Topmost="True">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition  />
@@ -19,56 +19,84 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="装備1" Width="110">
+				<DataGridTemplateColumn Header="装備1" Width="120">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding PSelectList1}" SelectedItem="{Binding PName1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg1}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="" Width="30">
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize1}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="固定" Width="35">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding PCheck1, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg1}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="装備2" Width="110">
+				<DataGridTemplateColumn Header="装備2" Width="120">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding PSelectList2}" SelectedItem="{Binding PName2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg2}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="" Width="30">
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize2}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="固定" Width="35">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding PCheck2, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg2}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="装備3" Width="110">
+				<DataGridTemplateColumn Header="装備3" Width="120">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding PSelectList3}" SelectedItem="{Binding PName3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg3}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="" Width="30">
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize3}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="固定" Width="35">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding PCheck3, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg3}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="装備4" Width="110">
+				<DataGridTemplateColumn Header="装備4" Width="120">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding PSelectList4}" SelectedItem="{Binding PName4, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg4}" Height="30" FontSize="15" VerticalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="" Width="30">
+				<DataGridTemplateColumn Header="搭載" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding PSlotSize4}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="固定" Width="35">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding PCheck4, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg4}" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -78,64 +106,69 @@
 			</DataGrid.Columns>
 		</DataGrid>
 
-		<Grid Grid.Row="1" Margin="5,5,5,5">
-			<Grid.RowDefinitions>
-				<RowDefinition />
-				<RowDefinition />
-			</Grid.RowDefinitions>
-			<Grid Grid.Row="0">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="50" />
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-				</Grid.ColumnDefinitions>
-				<Button Grid.Column="0" Content="装備..." Command="{Binding SetWeaponCommand}" Margin="5,5,5,5" Padding="10,0,10,0" />
-				<TextBlock Grid.Column="1" Margin="5,5,5,5" VerticalAlignment="Center" Text="必要制空値：" />
-				<TextBox Grid.Column="2" Margin="5,5,5,5" VerticalAlignment="Center" Text="{Binding EnemyAirPower, UpdateSourceTrigger=PropertyChanged}" />
-				<ComboBox Grid.Column="3" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding AirStatusMode, UpdateSourceTrigger=PropertyChanged}">
-					<ComboBoxItem Content="制空権確保" />
-					<ComboBoxItem Content="航空優勢" />
-					<ComboBoxItem Content="制空均衡" />
-					<ComboBoxItem Content="航空劣勢" />
-				</ComboBox>
-				<ComboBox Grid.Column="4" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding OptimizeType, UpdateSourceTrigger=PropertyChanged}">
-					<ComboBoxItem Content="優先なし" />
-					<ComboBoxItem Content="航空戦優先" />
-					<ComboBoxItem Content="砲撃戦優先" />
-				</ComboBox>
-				<ComboBox Grid.Column="5" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding AntiFieldType, UpdateSourceTrigger=PropertyChanged}">
-					<ComboBoxItem Content="対地指定なし" />
-					<ComboBoxItem Content="対地攻撃ON" />
-					<ComboBoxItem Content="対地攻撃OFF" />
-				</ComboBox>
-				<TextBlock Grid.Column="6" Margin="5,5,5,5" VerticalAlignment="Center" Text="計算時間の上限：" />
-				<ComboBox Grid.Column="7" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding TimeLimitType, UpdateSourceTrigger=PropertyChanged}">
-					<ComboBoxItem Content="10秒 " />
-					<ComboBoxItem Content="30秒 " />
-					<ComboBoxItem Content="1分  " />
-					<ComboBoxItem Content="10分 " />
-					<ComboBoxItem Content="1時間" />
-					<ComboBoxItem Content="1日  " />
-					<ComboBoxItem Content="3週間" />
-				</ComboBox>
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid Grid.Column="0" Margin="5,5,5,5">
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Grid Grid.Row="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="50" />
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+					</Grid.ColumnDefinitions>
+					<Button Grid.Column="0" Content="装備..." Command="{Binding SetWeaponCommand}" Margin="5,5,5,5" Padding="10,0,10,0" />
+					<TextBlock Grid.Column="1" Margin="5,5,5,5" VerticalAlignment="Center" Text="必要制空値：" />
+					<TextBox Grid.Column="2" Margin="5,5,5,5" VerticalAlignment="Center" Text="{Binding EnemyAirPower, UpdateSourceTrigger=PropertyChanged}" />
+					<ComboBox Grid.Column="3" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding AirStatusMode, UpdateSourceTrigger=PropertyChanged}">
+						<ComboBoxItem Content="制空権確保" />
+						<ComboBoxItem Content="航空優勢" />
+						<ComboBoxItem Content="制空均衡" />
+						<ComboBoxItem Content="航空劣勢" />
+					</ComboBox>
+					<ComboBox Grid.Column="4" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding OptimizeType, UpdateSourceTrigger=PropertyChanged}">
+						<ComboBoxItem Content="優先なし" />
+						<ComboBoxItem Content="航空戦優先" />
+						<ComboBoxItem Content="砲撃戦優先" />
+					</ComboBox>
+					<ComboBox Grid.Column="5" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding AntiFieldType, UpdateSourceTrigger=PropertyChanged}">
+						<ComboBoxItem Content="対地指定なし" />
+						<ComboBoxItem Content="対地攻撃ON" />
+						<ComboBoxItem Content="対地攻撃OFF" />
+					</ComboBox>
+				</Grid>
+				<Grid Grid.Row="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+					</Grid.ColumnDefinitions>
+					<TextBlock Grid.Column="0" Margin="5,5,5,5" VerticalAlignment="Center" Text="計算時間の上限：" />
+					<ComboBox Grid.Column="1" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding TimeLimitType, UpdateSourceTrigger=PropertyChanged}">
+						<ComboBoxItem Content="10秒 " />
+						<ComboBoxItem Content="30秒 " />
+						<ComboBoxItem Content="1分  " />
+						<ComboBoxItem Content="10分 " />
+						<ComboBoxItem Content="1時間" />
+						<ComboBoxItem Content="1日  " />
+						<ComboBoxItem Content="3週間" />
+					</ComboBox>
+					<CheckBox Grid.Column="2" Margin="5,5,5,5" Content="彩雲" IsChecked="{Binding SaiunCheck, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+					<CheckBox Grid.Column="3" Margin="5,5,5,5" Content="最小スロ回避" IsChecked="{Binding MinSlotCheck, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+					<CheckBox Grid.Column="4" Margin="5,5,5,5" Content="噴式使用禁止" IsChecked="{Binding NoUseJPB, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
+				</Grid>
 			</Grid>
-			<Grid Grid.Row="1">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-					<ColumnDefinition Width="auto" />
-				</Grid.ColumnDefinitions>
-				<CheckBox Grid.Column="0" Margin="5,5,5,5" Content="彩雲" IsChecked="{Binding SaiunCheck, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-				<CheckBox Grid.Column="1" Margin="5,5,5,5" Content="最小スロ回避" IsChecked="{Binding MinSlotCheck, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-				<CheckBox Grid.Column="2" Margin="5,5,5,5" Content="噴式使用禁止" IsChecked="{Binding NoUseJPB, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-				<Button Grid.Column="3" Content="最適化" Command="{Binding OptimizeCommand}" Margin="5,5,5,5" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-			</Grid>
+			<Button Grid.Column="1" Content="装備最適化" FontSize="40" Command="{Binding OptimizeCommand}" Margin="10,10,10,10" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 		</Grid>
 	</Grid>
 </Window>
