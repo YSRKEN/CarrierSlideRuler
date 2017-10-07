@@ -205,7 +205,7 @@ namespace CarrierSlideRuler.ViewModels {
 				// 最適化の方向
 				problem.ObjDir = ObjectDirection.Maximize;
 				// 制約式の数・名前・範囲
-				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1+1);
+				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1+1+X*2);
 				{
 					int p = 0;
 					//制空値制約
@@ -262,7 +262,8 @@ namespace CarrierSlideRuler.ViewModels {
 								else if(NoUseJPB && wType == WeaponType.JPB)
 									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
 								// 対地攻撃ON状態なら、艦爆や噴式は「＝0」
-								else if ((wType == WeaponType.PB || wType == WeaponType.JPB) && (AntiFieldType == 1))
+								// (ただし当該艦が昼戦CIをONにしていた場合は除く)
+								else if ((wType == WeaponType.PB || wType == WeaponType.JPB) && (AntiFieldType == 1) && !UnitList[x].CiFlg)
 									problem.SetRowBounds(p, BoundsType.Fixed, 0.0, 0.0);
 								// それ以外の場合なら「0≦□≦1」
 								else
@@ -301,6 +302,16 @@ namespace CarrierSlideRuler.ViewModels {
 					++p;
 					// 最小スロ回避制約
 					problem.SetRowBounds(p, BoundsType.Upper, 0.0, (MinSlotCheck ? 0.0 : X * Y * Z + 1));
+					++p;
+					// 昼戦CI用の制約
+					for (int x = 0; x < X; ++x) {
+						var kammusu = Database.GetKammusuData(UnitList[x].Name);
+						double temp = (kammusu.IsAirGunAttack && UnitList[x].CiFlg ? 1.0 : 0.0);
+						problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+						++p;
+						problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+						++p;
+					}
 				}
 				// 変数の数・名前・範囲
 				problem.AddColumns(X * Y * Z + 1 + 1);
@@ -519,6 +530,34 @@ namespace CarrierSlideRuler.ViewModels {
 									ar.Add(1.0);
 								}
 							}
+						}
+					}
+					{
+						// 昼戦CI用の制約(ia=XY+XYZ+Z+X+5～ia=XY+XYZ+Z+X+4+2X)
+						int p = X * Y + X * Y * Z + Z + X + 5;
+						for (int x = 0; x < X; ++x) {
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									var weapon = Database.GetWeaponData(weaponList[z]);
+									if (weapon.Type == WeaponType.PB) {
+										ia.Add(p);
+										ja.Add((x * Y + y) * Z + z);
+										ar.Add(1.0);
+									}
+								}
+							}
+							++p;
+							for (int y = 0; y < Y; ++y) {
+								for (int z = 0; z < Z; ++z) {
+									var weapon = Database.GetWeaponData(weaponList[z]);
+									if (weapon.Type == WeaponType.PA) {
+										ia.Add(p);
+										ja.Add((x * Y + y) * Z + z);
+										ar.Add(1.0);
+									}
+								}
+							}
+							++p;
 						}
 					}
 					problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
