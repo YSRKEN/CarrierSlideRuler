@@ -101,6 +101,8 @@ namespace CarrierSlideRuler.ViewModels {
 			public bool PCheck2 { get => PartsList[1].FixedFlg; set { PartsList[1].FixedFlg = value; }}
 			public bool PCheck3 { get => PartsList[2].FixedFlg; set { PartsList[2].FixedFlg = value; }}
 			public bool PCheck4 { get => PartsList[3].FixedFlg; set { PartsList[3].FixedFlg = value; }}
+			public bool CiFlg { get; set; }
+			public bool NightFlg { get; set; }
 
 			public Unit(Action act_) { act = act_; }
 		}
