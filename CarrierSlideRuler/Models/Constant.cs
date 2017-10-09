@@ -10,7 +10,14 @@ namespace CarrierSlideRuler.Models {
 	// 艦種データ
 	enum FleetType { None, CV, ACV, CVL, CA, CAV, CC, BB, BBV, AV, SSV, Other }
 	// 装備種データ
-	enum WeaponType { None, PF, PA, PB, JPB, WF, WB, PS, PSK, PSS, AS, Other }
+	enum WeaponType { None, PF, PFN, PA, PAN, PB, JPB, WF, WB, PS, PSK, PSS, AS, Other }
+	// 夜戦攻撃特性
+	// First→無条件に夜戦可能
+	// ArkRoyal→(Swordfish＋その派生型)≧1またはOtherの条件
+	// 実装上は、(夜航＋夜航甲＋カジキ系)≧1かつ(夜攻＋夜戦＋カジキ系)≧1と書く
+	// SaratogaMkII→(夜間攻撃機+夜間戦闘機)≧1
+	// OTher→(夜間作戦航空要員＋{夜間作戦航空要員＋熟練甲板員})≧1かつ(夜間攻撃機＋夜間戦闘機)≧1
+	enum NightAttackType { First, ArkRoyal, SaratogaMkII, Other }
 	// その他定数
 	static class Constant {
 		// メイン画面上の艦数と装備数
@@ -39,8 +46,10 @@ namespace CarrierSlideRuler.Models {
 		// 装備種データと文字列との対応ハッシュ
 		public static WeaponTypeTable weaponTypeTable = new WeaponTypeTable() {
 			{"艦上戦闘機", WeaponType.PF}, //Plane Fighter
+			{"艦上戦闘機(夜間)", WeaponType.PFN}, //Plane Fighter(Night)
 			{"艦上攻撃機", WeaponType.PA}, //Plane Attacker
-			{"艦上爆撃機", WeaponType.PB}, //Plane Bomber
+			{"艦上攻撃機(夜間)", WeaponType.PAN}, //Plane Attacker(Night)
+			{ "艦上爆撃機", WeaponType.PB}, //Plane Bomber
 			{"噴式戦闘爆撃機", WeaponType.JPB}, //Jet Plane Bomber
 			{"水上戦闘機", WeaponType.WF}, //Water Fighter
 			{"水上爆撃機", WeaponType.WB}, //Water Bomber
@@ -60,9 +69,11 @@ namespace CarrierSlideRuler.Models {
 		public static int AntiAirBonus(WeaponType wt) {
 			switch (wt) {
 			case WeaponType.PF:
+			case WeaponType.PFN:
 			case WeaponType.WF: return 22;
 			case WeaponType.WB: return 6;
 			case WeaponType.PA:
+			case WeaponType.PAN:
 			case WeaponType.PB:
 			case WeaponType.JPB:
 			default: return 0;

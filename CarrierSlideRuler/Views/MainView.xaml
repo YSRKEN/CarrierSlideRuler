@@ -4,7 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:CarrierSlideRuler.Views"
-		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="950" MaxHeight="400" MinWidth="950" ResizeMode="CanResize" Topmost="True">
+		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="1000" MaxHeight="400" MinWidth="1000" ResizeMode="CanResize" Topmost="True">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition  />
@@ -12,7 +12,7 @@
 		</Grid.RowDefinitions>
 		<DataGrid Grid.Row="0" Margin="5,5,5,5" ItemsSource="{Binding UnitList}" IsReadOnly="True" AutoGenerateColumns="False">
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="艦名" Width="150">
+				<DataGridTemplateColumn Header="艦名" Width="120">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ComboBox ItemsSource="{Binding USelectList}" SelectedItem="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" FontSize="15" VerticalAlignment="Center"/>
@@ -100,6 +100,20 @@
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding PCheck4, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg4}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="CI" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox IsChecked="{Binding CiFlg, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="夜戦" Width="35">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox IsChecked="{Binding NightFlg, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
