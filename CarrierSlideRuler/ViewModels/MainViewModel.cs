@@ -473,6 +473,7 @@ namespace CarrierSlideRuler.ViewModels {
 					}
 					{
 						// 航空戦火力(ia=XY+XYZ+Z+X+1)
+						// 空母カットイン時は熟練クリティカル補正が適用されないので注意
 						int p = X * Y + X * Y * Z + Z + X + 1;
 						for (int x = 0; x < X; ++x) {
 							var kammusu = Database.GetKammusuData(UnitList[x].Name);
@@ -481,7 +482,11 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
-									double coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
+									double coeff = 1.0;
+									if (UnitList[x].CiFlg)
+										coeff = 1.15;	//本当は複数の係数があるが決め打ち
+									else
+										coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
 									if (!weapon.IsStage3 || kammusu.Airs[y] == 0)
 										ar.Add(0.0);
 									else {
@@ -505,6 +510,7 @@ namespace CarrierSlideRuler.ViewModels {
 						ar.Add(-1.0);
 						++p;
 						// 砲撃戦火力(ia=XY+XYZ+Z+X+2)
+						// 空母カットイン時は熟練クリティカル補正が適用されないので注意
 						for (int x = 0; x < X; ++x) {
 							var kammusu = Database.GetKammusuData(UnitList[x].Name);
 							for (int y = 0; y < Y; ++y) {
@@ -512,7 +518,11 @@ namespace CarrierSlideRuler.ViewModels {
 									ia.Add(p);
 									ja.Add((x * Y + y) * Z + z);
 									var weapon = Database.GetWeaponData(weaponList[z]);
-									double coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
+									double coeff = 1.0;
+									if (UnitList[x].CiFlg)
+										coeff = 1.15;   //本当は複数の係数があるが決め打ち
+									else
+										coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
 									if (!kammusu.IsAirGunAttack || !weapon.IsStage3)
 										ar.Add(0.0);
 									else {
