@@ -160,14 +160,15 @@ namespace CarrierSlideRuler.Models {
 			// 線形検索
 			foreach (var pair in weaponDictionary) {
 				// 装備の種類を取得
-				var name = pair.Value.Name;
-				var type = pair.Value.Type;
+				string name = pair.Value.Name;
 				// 艦娘の状態に合わせ、その装備を装備できるかを判定する
-				switch (type) {
+				switch (pair.Value.Type) {
 				case WeaponType.PF:
+				case WeaponType.PFN:
 					if (kammusu.HasPF) list.Add(name);
 					break;
 				case WeaponType.PA:
+				case WeaponType.PAN:
 					if (kammusu.HasPA) list.Add(name);
 					break;
 				case WeaponType.PB:
@@ -219,9 +220,11 @@ namespace CarrierSlideRuler.Models {
 			var weapon = GetWeaponData(wName);
 			switch (weapon.Type) {
 			case WeaponType.PF:
+			case WeaponType.PFN:
 				if (kammusu.HasPF) return true;
 				break;
 			case WeaponType.PA:
+			case WeaponType.PAN:
 				if (kammusu.HasPA) return true;
 				break;
 			case WeaponType.PB:
@@ -314,6 +317,25 @@ namespace CarrierSlideRuler.Models {
 		public bool IsAirGunAttack {
 			get => (Type == FleetType.CV || Type == FleetType.CVL || Type == FleetType.ACV || Name == "速吸改");
 		}
+		// 夜戦攻撃の種類
+		public NightAttackType NightAttackType {
+			get {
+				switch (Name) {
+				case "Graf Zeppelin":
+				case "Graf Zeppelin改":
+				case "Saratoga":
+				case "大鷹改二":
+					return NightAttackType.First;
+				case "Ark Royal":
+				case "Ark Royal改":
+					return NightAttackType.ArkRoyal;
+				case "Saratoga Mk.II":
+					return NightAttackType.SaratogaMkII;
+				default:
+					return NightAttackType.Other;
+				}
+			}
+		}
 	}
 	// 装備データの内部表現
 	class WeaponData {
@@ -354,12 +376,12 @@ namespace CarrierSlideRuler.Models {
 		}
 		// Stage1(航空戦)に参加するか？
 		public bool IsStage1 {
-			get => (Type == WeaponType.PF || Type == WeaponType.PA || Type == WeaponType.PB
-				|| Type == WeaponType.JPB || Type == WeaponType.WF || Type == WeaponType.WB);
+			get => (Type == WeaponType.PF || Type == WeaponType.PFN || Type == WeaponType.PA || Type == WeaponType.PAN
+				|| Type == WeaponType.PB || Type == WeaponType.JPB || Type == WeaponType.WF || Type == WeaponType.WB);
 		}
 		// Stage3(航空攻撃)に参加するか？
 		public bool IsStage3 {
-			get => (Type == WeaponType.PA || Type == WeaponType.PB || Type == WeaponType.JPB || Type == WeaponType.WB);
+			get => (Type == WeaponType.PA || Type == WeaponType.PAN || Type == WeaponType.PB || Type == WeaponType.JPB || Type == WeaponType.WB);
 		}
 	}
 }
