@@ -10,7 +10,7 @@ namespace CarrierSlideRuler.Models {
 	// 艦種データ
 	enum FleetType { None, CV, ACV, CVL, CA, CAV, CC, BB, BBV, AV, SSV, Other }
 	// 装備種データ
-	enum WeaponType { None, PF, PA, PB, JPB, WF, WB, PS, PSK, PSS, AS, Other }
+	enum WeaponType { None, PF, PFN, PA, PB, JPB, WF, WB, PS, PSK, PSS, AS, Other }
 	// その他定数
 	static class Constant {
 		// メイン画面上の艦数と装備数
@@ -39,6 +39,7 @@ namespace CarrierSlideRuler.Models {
 		// 装備種データと文字列との対応ハッシュ
 		public static WeaponTypeTable weaponTypeTable = new WeaponTypeTable() {
 			{"艦上戦闘機", WeaponType.PF}, //Plane Fighter
+			{"艦上戦闘機(夜間)", WeaponType.PFN}, //Plane Fighter(Night)
 			{"艦上攻撃機", WeaponType.PA}, //Plane Attacker
 			{"艦上爆撃機", WeaponType.PB}, //Plane Bomber
 			{"噴式戦闘爆撃機", WeaponType.JPB}, //Jet Plane Bomber
