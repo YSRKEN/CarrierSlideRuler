@@ -13,7 +13,7 @@ using System.Windows.Input;
 namespace CarrierSlideRuler.ViewModels {
 	class MainViewModel : ViewModelBase {
 		public delegate void Action();
-		WeaponListView wlv = null;
+		WeaponListView wlv;
 		// 艦名や装備についての情報
 		public class Parts {
 			public string Name { get; set; }
@@ -208,7 +208,7 @@ namespace CarrierSlideRuler.ViewModels {
 				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1+1+X*2+X*2);
 				{
 					int p = 0;
-					//制空値制約
+					//制空値制約(マージンは1割)
 					double wantAaPower = EnemyAirPower * 1.1;
 					switch (AirStatusMode) {
 					case 0:
@@ -488,6 +488,7 @@ namespace CarrierSlideRuler.ViewModels {
 										double temp = Math.Sqrt(kammusu.Airs[y]) * (weapon.Bomb + weapon.Torpedo) + (Math.Sqrt(100 / 10) + 25);
 										switch (weapon.Type) {
 										case WeaponType.PA:
+										case WeaponType.PAN:
 											temp *= 1.15;
 											break;
 										case WeaponType.JPB:
@@ -517,6 +518,7 @@ namespace CarrierSlideRuler.ViewModels {
 									else {
 										switch (weapon.Type) {
 										case WeaponType.PA:
+										case WeaponType.PAN:
 											ar.Add(1.5 * weapon.Torpedo * coeff + weapon.Attack);
 											break;
 										case WeaponType.PB:
@@ -582,7 +584,7 @@ namespace CarrierSlideRuler.ViewModels {
 							for (int y = 0; y < Y; ++y) {
 								for (int z = 0; z < Z; ++z) {
 									var weapon = Database.GetWeaponData(weaponList[z]);
-									if (weapon.Type == WeaponType.PA) {
+									if (weapon.Type == WeaponType.PA || weapon.Type == WeaponType.PAN) {
 										ia.Add(p);
 										ja.Add((x * Y + y) * Z + z);
 										ar.Add(1.0);

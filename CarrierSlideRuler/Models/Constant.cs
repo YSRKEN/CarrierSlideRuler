@@ -69,9 +69,11 @@ namespace CarrierSlideRuler.Models {
 		public static int AntiAirBonus(WeaponType wt) {
 			switch (wt) {
 			case WeaponType.PF:
+			case WeaponType.PFN:
 			case WeaponType.WF: return 22;
 			case WeaponType.WB: return 6;
 			case WeaponType.PA:
+			case WeaponType.PAN:
 			case WeaponType.PB:
 			case WeaponType.JPB:
 			default: return 0;
