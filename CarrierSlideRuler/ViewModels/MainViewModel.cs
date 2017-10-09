@@ -205,7 +205,7 @@ namespace CarrierSlideRuler.ViewModels {
 				// 最適化の方向
 				problem.ObjDir = ObjectDirection.Maximize;
 				// 制約式の数・名前・範囲
-				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1+1+X*2);
+				problem.AddRows(1+X*Y+X*Y*Z+Z+X*Y+1+1+1+1+X*2+X*2);
 				{
 					int p = 0;
 					//制空値制約
@@ -311,6 +311,38 @@ namespace CarrierSlideRuler.ViewModels {
 						++p;
 						problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
 						++p;
+					}
+					// 夜戦用の制約
+					for (int x = 0; x < X; ++x) {
+						var kammusu = Database.GetKammusuData(UnitList[x].Name);
+						double temp = (kammusu.IsAirGunAttack && UnitList[x].NightFlg ? 1.0 : 0.0);
+						// 夜戦特性を読み取り、それによって条件を変える
+						switch (kammusu.NightAttackType) {
+						case NightAttackType.First:
+							problem.SetRowBounds(p, BoundsType.Lower, 0.0, 0.0);
+							++p;
+							problem.SetRowBounds(p, BoundsType.Lower, 0.0, 0.0);
+							++p;
+							break;
+						case NightAttackType.ArkRoyal:
+							problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+							++p;
+							problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+							++p;
+							break;
+						case NightAttackType.SaratogaMkII:
+							problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+							++p;
+							problem.SetRowBounds(p, BoundsType.Lower, 0.0, 0.0);
+							++p;
+							break;
+						case NightAttackType.Other:
+							problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+							++p;
+							problem.SetRowBounds(p, BoundsType.Lower, temp, 0.0);
+							++p;
+							break;
+						}
 					}
 				}
 				// 変数の数・名前・範囲
@@ -533,7 +565,7 @@ namespace CarrierSlideRuler.ViewModels {
 						}
 					}
 					{
-						// 昼戦CI用の制約(ia=XY+XYZ+Z+X+5～ia=XY+XYZ+Z+X+4+2X)
+						// 昼戦CI用の制約(ia=XY+XYZ+Z+X+4+1～ia=XY+XYZ+Z+X+4+2X)
 						int p = X * Y + X * Y * Z + Z + X + 5;
 						for (int x = 0; x < X; ++x) {
 							for (int y = 0; y < Y; ++y) {
@@ -558,6 +590,89 @@ namespace CarrierSlideRuler.ViewModels {
 								}
 							}
 							++p;
+						}
+					}
+					{
+						// 夜戦用の制約(ia=XY+XYZ+Z+X+4+2X+1～ia=XY+XYZ+Z+X+4+2X+2X)
+						int p = X * Y + X * Y * Z + Z + X + 4 + 2 * X + 1;
+						for (int x = 0; x < X; ++x) {
+							var kammusu = Database.GetKammusuData(UnitList[x].Name);
+							// 夜戦特性を読み取り、それによって条件を変える
+							switch (kammusu.NightAttackType) {
+							case NightAttackType.First:
+								// First→無条件に夜戦可能
+								++p;
+								++p;
+								break;
+							case NightAttackType.ArkRoyal:
+								// ArkRoyal→(Swordfish＋その派生型)≧1またはOtherの条件
+								// 実装上は、(夜航＋夜航甲＋カジキ系)≧1かつ(夜攻＋夜戦＋カジキ系)≧1と書く
+								for (int y = 0; y < Y; ++y) {
+									for (int z = 0; z < Z; ++z) {
+										var weapon = Database.GetWeaponData(weaponList[z]);
+										if (weapon.Name.IndexOf("夜間作戦航空要員") >= 0
+											|| weapon.Name.IndexOf("Swordfish") >= 0) {
+											ia.Add(p);
+											ja.Add((x * Y + y) * Z + z);
+											ar.Add(1.0);
+										}
+									}
+								}
+								++p;
+								for (int y = 0; y < Y; ++y) {
+									for (int z = 0; z < Z; ++z) {
+										var weapon = Database.GetWeaponData(weaponList[z]);
+										if (weapon.Type == WeaponType.PAN || weapon.Type == WeaponType.PFN
+											|| weapon.Name.IndexOf("Swordfish") >= 0) {
+											ia.Add(p);
+											ja.Add((x * Y + y) * Z + z);
+											ar.Add(1.0);
+										}
+									}
+								}
+								++p;
+								break;
+							case NightAttackType.SaratogaMkII:
+								// SaratogaMkII→(夜間攻撃機+夜間戦闘機)≧1
+								for (int y = 0; y < Y; ++y) {
+									for (int z = 0; z < Z; ++z) {
+										var weapon = Database.GetWeaponData(weaponList[z]);
+										if (weapon.Type == WeaponType.PAN || weapon.Type == WeaponType.PFN) {
+											ia.Add(p);
+											ja.Add((x * Y + y) * Z + z);
+											ar.Add(1.0);
+										}
+									}
+								}
+								++p;
+								++p;
+								break;
+							case NightAttackType.Other:
+								// OTher→(夜間作戦航空要員＋{夜間作戦航空要員＋熟練甲板員})≧1かつ(夜間攻撃機＋夜間戦闘機)≧1
+								for (int y = 0; y < Y; ++y) {
+									for (int z = 0; z < Z; ++z) {
+										var weapon = Database.GetWeaponData(weaponList[z]);
+										if (weapon.Name.IndexOf("夜間作戦航空要員") >= 0) {
+											ia.Add(p);
+											ja.Add((x * Y + y) * Z + z);
+											ar.Add(1.0);
+										}
+									}
+								}
+								++p;
+								for (int y = 0; y < Y; ++y) {
+									for (int z = 0; z < Z; ++z) {
+										var weapon = Database.GetWeaponData(weaponList[z]);
+										if (weapon.Type == WeaponType.PAN || weapon.Type == WeaponType.PFN) {
+											ia.Add(p);
+											ja.Add((x * Y + y) * Z + z);
+											ar.Add(1.0);
+										}
+									}
+								}
+								++p;
+								break;
+							}
 						}
 					}
 					problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
