@@ -8,7 +8,7 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition  />
-			<RowDefinition Height="80"/>
+			<RowDefinition Height="90"/>
 		</Grid.RowDefinitions>
 		<DataGrid Grid.Row="0" Margin="5,5,5,5" ItemsSource="{Binding UnitList}" IsReadOnly="True" AutoGenerateColumns="False">
 			<DataGrid.Columns>
@@ -134,9 +134,9 @@
 				<Grid Grid.Row="0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="auto" />
-						<ColumnDefinition Width="auto" />
-						<ColumnDefinition Width="auto" />
-						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="70" />
+						<ColumnDefinition Width="100" />
+						<ColumnDefinition Width="110" />
 					</Grid.ColumnDefinitions>
 					<TextBlock Grid.Column="0" Margin="5,5,5,5" VerticalAlignment="Center" Text="計算時間の上限：" />
 					<ComboBox Grid.Column="1" Margin="5,5,5,5" VerticalAlignment="Center" SelectedIndex="{Binding TimeLimitType, UpdateSourceTrigger=PropertyChanged}">
@@ -172,7 +172,7 @@
 					<CheckBox Grid.Column="3" Margin="5,5,5,5" Content="噴式使用禁止" IsChecked="{Binding NoUseJPB, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
 				</Grid>
 			</Grid>
-			<GroupBox Grid.Column="1" Header="敵制空値">
+			<GroupBox Grid.Column="1" Header="敵制空値" Margin="0,2,0,2">
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="auto"/>
@@ -181,21 +181,28 @@
 						<ColumnDefinition Width="auto"/>
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="auto"/>
+						<RowDefinition/>
 						<RowDefinition/>
 					</Grid.RowDefinitions>
-					<TextBlock Grid.Row="0" Grid.Column="0" Text="制空値：" Margin="5,2,5,2"/>
-					<TextBox Grid.Row="1" Grid.Column="0" Text="0" Margin="5,5,5,5" Height="24" />
-					<TextBlock Grid.Row="0" Grid.Column="1" Text="制空状況：" Margin="5,2,5,2"/>
-					<ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="0" Margin="5,5,5,5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+					<TextBlock Grid.Row="0" Grid.Column="0" Text="制空値：" Margin="5,2,5,2" VerticalAlignment="Center"/>
+					<TextBox Grid.Row="1" Grid.Column="0" Text="{Binding EnemyAirPowerTemp, UpdateSourceTrigger=PropertyChanged}"
+							Margin="5,2,5,2" Height="20" VerticalAlignment="Center"/>
+					<TextBlock Grid.Row="0" Grid.Column="1" Text="制空状況：" Margin="5,2,5,2" VerticalAlignment="Center"/>
+					<ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding AirStatusModeTemp, UpdateSourceTrigger=PropertyChanged}"
+							Margin="5,2,5,2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="24" VerticalAlignment="Center">
 						<ComboBoxItem Content="確保"/>
 						<ComboBoxItem Content="優勢"/>
 						<ComboBoxItem Content="均衡"/>
 						<ComboBoxItem Content="劣勢"/>
 						<ComboBoxItem Content="喪失"/>
 					</ComboBox>
-					<Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Content="追加" Margin="5,5,5,5" Width="30" Height="30"/>
-					<ListBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Width="80" Margin="5,5,5,5"/>
+					<Button Grid.Row="0" Grid.Column="2" Content="追加" Margin="5,5,5,5" Width="30" Height="20"
+							Command="{Binding AddEnemyParamCommand}"/>
+					<Button Grid.Row="1" Grid.Column="2" Content="削除" Margin="5,5,5,5" Width="30" Height="20"
+							Command="{Binding DeleteEnemyParamCommand}"/>
+					<ListBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Width="80" Margin="5,5,5,5"
+							SelectedIndex="{Binding EnemyParamIndex, UpdateSourceTrigger=PropertyChanged}"
+							ItemsSource="{Binding EnemyParamViewList, UpdateSourceTrigger=PropertyChanged}"/>
 				</Grid>
 			</GroupBox>
 			<Button Grid.Column="2" Content="装備最適化" FontSize="40" Command="{Binding OptimizeCommand}" Margin="10,10,10,10" Padding="10,0,10,0" IsEnabled="{Binding OptimizeButtonState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
