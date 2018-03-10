@@ -450,7 +450,7 @@ namespace CarrierSlideRuler.ViewModels {
 										}
 										else
 										{
-											double temp = Math.Sqrt(kammusu.Airs[y]) * weapon.AntiAir + (Math.Sqrt(100 / 10) + Constant.AntiAirBonus(weapon.Type));
+											double temp = (int)(Math.Sqrt(kammusu.Airs[y]) * weapon.AntiAir + (Math.Sqrt(100 / 10) + Constant.AntiAirBonus(weapon.Type)));
 											ar.Add(temp);
 										}
 										++p;
