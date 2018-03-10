@@ -486,7 +486,7 @@ namespace CarrierSlideRuler.ViewModels {
 									if (UnitList[x].CiFlg)
 										coeff = 1.15;	//本当は複数の係数があるが決め打ち
 									else
-										coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
+										coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.5 : 1.1);	//1スロ励行のため、ちょっと極端な設定にした
 									if (!weapon.IsStage3 || kammusu.Airs[y] == 0)
 										ar.Add(0.0);
 									else {
@@ -522,7 +522,7 @@ namespace CarrierSlideRuler.ViewModels {
 									if (UnitList[x].CiFlg)
 										coeff = 1.15;   //本当は複数の係数があるが決め打ち
 									else
-										coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.2 : 1.1);
+										coeff = (1.0 + 1.0 * (weapon.Hit + weapon.Evade) / 100) * (y == 0 ? 1.5 : 1.1); //1スロ励行のため、ちょっと極端な設定にした
 									if (!kammusu.IsAirGunAttack || !weapon.IsStage3)
 										ar.Add(0.0);
 									else {
