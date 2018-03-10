@@ -242,7 +242,7 @@ namespace CarrierSlideRuler.ViewModels {
 				{
 					// 最適化の方向
 					problem.ObjDir = ObjectDirection.Maximize;
-					// 制約式の数・名前・範囲
+					#region 制約式の数・名前・範囲
 					problem.AddRows(1 + X * Y + X * Y * Z + Z + X * Y + 1 + 1 + 1 + 1 + X * 2 + X * 2);
 					{
 						int p = 0;
@@ -381,7 +381,8 @@ namespace CarrierSlideRuler.ViewModels {
 							}
 						}
 					}
-					// 変数の数・名前・範囲
+					#endregion
+					#region 変数の数・名前・範囲
 					problem.AddColumns(X * Y * Z + 1 + 1);
 					{
 						int p = 0;
@@ -405,7 +406,8 @@ namespace CarrierSlideRuler.ViewModels {
 						problem.ColumnName[p] = "Attack_G";
 						++p;
 					}
-					// 目的関数の係数
+					#endregion
+					#region 目的関数の係数
 					{
 						int p = 0;
 						for (int x = 0; x < X; ++x)
@@ -424,7 +426,8 @@ namespace CarrierSlideRuler.ViewModels {
 						problem.ObjCoef[p] = (OptimizeType == 2 ? 2.0 : 1.0);
 						++p;
 					}
-					// 制約式の係数
+					#endregion
+					#region 制約式の係数
 					{
 						// 記録用のリストを用意
 						var ia = new List<int>();
@@ -789,6 +792,7 @@ namespace CarrierSlideRuler.ViewModels {
 						}
 						problem.LoadMatrix(ia.ToArray(), ja.ToArray(), ar.ToArray());
 					}
+					#endregion
 					//string hoge = problem.ToLpString();
 					// 最適化を実行
 					var timeLimit = new int[] { 10, 30, 60, 600, 3600, 86400, 86400 * 21 };
@@ -843,10 +847,13 @@ namespace CarrierSlideRuler.ViewModels {
 							UnitList[x].PName4 = answer[p];
 							++p;
 						}
+						// その状態でSt1撃墜をテストし、問題ないかを判断する
+
 					}
 					else
 					{
 						MessageBox.Show("実行可能解が出せませんでした。", "CarrierSlideRuler", MessageBoxButton.OK, MessageBoxImage.Warning);
+						break;
 					}
 				}
 				break;
