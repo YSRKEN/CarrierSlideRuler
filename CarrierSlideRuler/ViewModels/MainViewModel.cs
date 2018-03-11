@@ -155,6 +155,8 @@ namespace CarrierSlideRuler.ViewModels {
 		public bool NoUseJPB { get; set; }
 		// 時間制限
 		public int TimeLimitType { get; set; }
+		// 制空値を更に盛る設定
+		public int AddAirPowerPerIndex { get; set; }
 
 		// 敵艦隊一覧のインデックス
 		public int EnemyParamIndex { get; set; }
@@ -231,6 +233,8 @@ namespace CarrierSlideRuler.ViewModels {
 			Title = "CarrierSlideRuler(最適化中...)";
 			// 目指す制空値の初期目標として、敵艦隊＆制空状況の条件をすべて満たすものがある
 			double wantAaPower = GetWantAaPower();
+			var addAirPowerPer = new List<double> { 1.0, 1.01, 1.03, 1.05, 1.07, 1.10 };
+			wantAaPower *= addAirPowerPer[AddAirPowerPerIndex];
 			//
 			while (true)
 			{
@@ -833,6 +837,7 @@ namespace CarrierSlideRuler.ViewModels {
 						if (result == SolverResult.ErrorTimeLimit)
 							message += "\n※時間制限が来たので計算を打ち切りました。\n";
 						// ダイアログで結果を表示
+						SetTitleBar();
 						MessageBox.Show(message, "CarrierSlideRuler", MessageBoxButton.OK, MessageBoxImage.Information);
 						// 画面に反映する
 						int p = 0;
@@ -877,6 +882,7 @@ namespace CarrierSlideRuler.ViewModels {
 						{
 							Title = "CarrierSlideRuler(最適化中...)";
 							wantAaPower = Simulator.CalcAAV(slotList) * Math.Max(resultSt1.Value, 1.01);
+							wantAaPower *= addAirPowerPer[AddAirPowerPerIndex];
 						}
 					}
 					else
@@ -887,7 +893,6 @@ namespace CarrierSlideRuler.ViewModels {
 				}
 			}
 			OptimizeButtonState = true;
-			SetTitleBar();
 		}
 
 		// 「追加」「削除」ボタン
