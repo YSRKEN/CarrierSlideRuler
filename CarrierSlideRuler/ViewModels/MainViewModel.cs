@@ -848,7 +848,36 @@ namespace CarrierSlideRuler.ViewModels {
 							++p;
 						}
 						// その状態でSt1撃墜をテストし、問題ないかを判断する
-
+						//制空に参加するスロットの一覧表を出す(制空値・搭載数)
+						var slotList = new List<KeyValuePair<WeaponData, int>>();
+						for (int x = 0; x < X; ++x)
+						{
+							var kammusu = Database.GetKammusuData(UnitList[x].Name);
+							for(int si = 0; si < kammusu.SlotCount; ++si){
+								var weapon = Database.GetWeaponData(UnitList[x].PartsList[si].Name);
+								if(weapon.IsStage1 && kammusu.Airs[si] > 0)
+								{
+									slotList.Add(new KeyValuePair<WeaponData, int>(weapon, kammusu.Airs[si]));
+								}
+							}
+						}
+						var resultSt1 = Simulator.MonteCarloTestWithSt1(enemyParamList, slotList, 10000);
+						string message2 = "テスト結果：\n";
+						var list = new List<string> { "確保", "優勢", "均衡", "劣勢", "喪失" };
+						for (int ei = 0; ei < resultSt1.Key.Count; ++ei)
+						{
+							message2 += $"　{ei + 1}回目→制空{enemyParamList[ei].Key}・{list[enemyParamList[ei].Value]}　{Math.Round(100.0 * resultSt1.Key[ei], 1)}％\n";
+						}
+						message2 += "\n最適化を終了しますか？";
+						if (MessageBox.Show(message2, "CarrierSlideRuler", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+						{
+							break;
+						}
+						else
+						{
+							Title = "CarrierSlideRuler(最適化中...)";
+							wantAaPower = Simulator.CalcAAV(slotList) * Math.Max(resultSt1.Value, 1.01);
+						}
 					}
 					else
 					{
@@ -856,7 +885,6 @@ namespace CarrierSlideRuler.ViewModels {
 						break;
 					}
 				}
-				break;
 			}
 			OptimizeButtonState = true;
 			SetTitleBar();
