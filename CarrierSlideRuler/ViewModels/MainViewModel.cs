@@ -136,7 +136,7 @@ namespace CarrierSlideRuler.ViewModels {
 		public void SetTitleBar() {
 			Title = "CarrierSlideRuler(計算中...)";
 			int myAirPower = GetMyAirPower();
-			Title = $"CarrierSlideRuler(自制空値{myAirPower}, 目標制空値{GetWantAaPower()}, ({(myAirPower >= GetWantAaPower() ? "OK" : "NG")})";
+			Title = $"CarrierSlideRuler(自制空値{myAirPower}, 目標制空値{GetWantAaPower()}, {(myAirPower >= GetWantAaPower() ? "OK" : "NG")})";
 		}
 
 		// 敵制空値
