@@ -912,6 +912,32 @@ namespace CarrierSlideRuler.ViewModels {
 			SetTitleBar();
 		}
 
+		// 「制空状況をテスト」ボタン
+		public ICommand AirStatusTestCommand { get; }
+		private void AirStatusTest() {
+			if (enemyParamList.Count == 0)
+				return;
+			//制空に参加するスロットの一覧表を出す(制空値・搭載数)
+			int X = Constant.MaxKammusuCount;
+			var slotList = new List<KeyValuePair<WeaponData, int>>();
+			for (int x = 0; x < X; ++x) {
+				var kammusu = Database.GetKammusuData(UnitList[x].Name);
+				for (int si = 0; si < kammusu.SlotCount; ++si) {
+					var weapon = Database.GetWeaponData(UnitList[x].PartsList[si].Name);
+					if (weapon.IsStage1 && kammusu.Airs[si] > 0) {
+						slotList.Add(new KeyValuePair<WeaponData, int>(weapon, kammusu.Airs[si]));
+					}
+				}
+			}
+			var resultSt1 = Simulator.MonteCarloTestWithSt1(enemyParamList, slotList, 10000);
+			string message = "テスト結果：\n";
+			var list = new List<string> { "確保", "優勢", "均衡", "劣勢", "喪失" };
+			for (int ei = 0; ei < resultSt1.Key.Count; ++ei) {
+				message += $"　{ei + 1}回目→制空{enemyParamList[ei].Key}・{list[enemyParamList[ei].Value]}　{Math.Round(100.0 * resultSt1.Key[ei], 1)}％\n";
+			}
+			MessageBox.Show(message, "CarrierSlideRuler",MessageBoxButton.OK, MessageBoxImage.Information);
+		}
+
 		// コンストラクタ
 		public MainViewModel() {
 			// ボタンにCommandを設定する
@@ -919,6 +945,7 @@ namespace CarrierSlideRuler.ViewModels {
 			OptimizeCommand = new CommandBase(OptimizeAction);
 			AddEnemyParamCommand = new CommandBase(AddEnemyParamAction);
 			DeleteEnemyParamCommand = new CommandBase(DeleteEnemyParamAction);
+			AirStatusTestCommand = new CommandBase(AirStatusTest);
 			// 各オブジェクトの初期値を決定する
 			#region 艦名や装備についての情報
 			KammusuNameList = Database.KammusuNameList;
