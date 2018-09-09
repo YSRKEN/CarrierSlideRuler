@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -44,16 +43,18 @@ namespace CarrierSlideRuler.ViewModels {
 						NotifyPropertyChanged(nameof(PFlg2));
 						NotifyPropertyChanged(nameof(PFlg3));
 						NotifyPropertyChanged(nameof(PFlg4));
-						// 装備コンボボックスの表示内容
-						for (int w = 0; w < Constant.MaxWeaponCount; ++w) {
+                        NotifyPropertyChanged(nameof(PFlg5));
+                        // 装備コンボボックスの表示内容
+                        for (int w = 0; w < Constant.MaxWeaponCount; ++w) {
 							PartsList[w].Name = "なし";
 						}
 						NotifyPropertyChanged(nameof(PName1));
 						NotifyPropertyChanged(nameof(PName2));
 						NotifyPropertyChanged(nameof(PName3));
 						NotifyPropertyChanged(nameof(PName4));
-						// 装備コンボボックスの中身
-						for (int w = 0; w < kammusu.SlotCount; ++w) {
+                        NotifyPropertyChanged(nameof(PName5));
+                        // 装備コンボボックスの中身
+                        for (int w = 0; w < kammusu.SlotCount; ++w) {
 							// 一覧を初期化
 							PartsList[w].SelectList = Database.GetCanHaveList(kammusu);
 						}
@@ -61,8 +62,9 @@ namespace CarrierSlideRuler.ViewModels {
 						NotifyPropertyChanged(nameof(PSelectList2));
 						NotifyPropertyChanged(nameof(PSelectList3));
 						NotifyPropertyChanged(nameof(PSelectList4));
-						// 搭載数
-						pSlotSize = Enumerable.Repeat(0, Constant.MaxWeaponCount).ToList();
+                        NotifyPropertyChanged(nameof(PSelectList5));
+                        // 搭載数
+                        pSlotSize = Enumerable.Repeat(0, Constant.MaxWeaponCount).ToList();
 						for(int w = 0; w < Constant.MaxWeaponCount; ++w) {
 							pSlotSize[w] = kammusu.Airs[w];
 						}
@@ -70,7 +72,8 @@ namespace CarrierSlideRuler.ViewModels {
 						NotifyPropertyChanged(nameof(PSlotSize2));
 						NotifyPropertyChanged(nameof(PSlotSize3));
 						NotifyPropertyChanged(nameof(PSlotSize4));
-					}
+                        NotifyPropertyChanged(nameof(PSlotSize5));
+                    }
 					// SetTitleBarを走らせる
 					act();
 				}
@@ -85,23 +88,28 @@ namespace CarrierSlideRuler.ViewModels {
 			public string PName2 { get => PartsList[1].Name; set { PartsList[1].Name = value; NotifyPropertyChanged(nameof(PName2)); act(); } }
 			public string PName3 { get => PartsList[2].Name; set { PartsList[2].Name = value; NotifyPropertyChanged(nameof(PName3)); act(); } }
 			public string PName4 { get => PartsList[3].Name; set { PartsList[3].Name = value; NotifyPropertyChanged(nameof(PName4)); act(); } }
-			public List<string> PSelectList1 { get => PartsList[0].SelectList; }
+            public string PName5 { get => PartsList[4].Name; set { PartsList[4].Name = value; NotifyPropertyChanged(nameof(PName5)); act(); } }
+            public List<string> PSelectList1 { get => PartsList[0].SelectList; }
 			public List<string> PSelectList2 { get => PartsList[1].SelectList; }
 			public List<string> PSelectList3 { get => PartsList[2].SelectList; }
 			public List<string> PSelectList4 { get => PartsList[3].SelectList; }
-			public bool PFlg1 { get => PartsList[0].Flg; }
+            public List<string> PSelectList5 { get => PartsList[4].SelectList; }
+            public bool PFlg1 { get => PartsList[0].Flg; }
 			public bool PFlg2 { get => PartsList[1].Flg; }
 			public bool PFlg3 { get => PartsList[2].Flg; }
 			public bool PFlg4 { get => PartsList[3].Flg; }
-			public int PSlotSize1 { get => pSlotSize[0]; }
+            public bool PFlg5 { get => PartsList[4].Flg; }
+            public int PSlotSize1 { get => pSlotSize[0]; }
 			public int PSlotSize2 { get => pSlotSize[1]; }
 			public int PSlotSize3 { get => pSlotSize[2]; }
 			public int PSlotSize4 { get => pSlotSize[3]; }
-			public bool PCheck1 { get => PartsList[0].FixedFlg; set { PartsList[0].FixedFlg = value; } }
+            public int PSlotSize5 { get => pSlotSize[4]; }
+            public bool PCheck1 { get => PartsList[0].FixedFlg; set { PartsList[0].FixedFlg = value; } }
 			public bool PCheck2 { get => PartsList[1].FixedFlg; set { PartsList[1].FixedFlg = value; }}
 			public bool PCheck3 { get => PartsList[2].FixedFlg; set { PartsList[2].FixedFlg = value; }}
 			public bool PCheck4 { get => PartsList[3].FixedFlg; set { PartsList[3].FixedFlg = value; }}
-			public bool CiFlg { get; set; }
+            public bool PCheck5 { get => PartsList[4].FixedFlg; set { PartsList[4].FixedFlg = value; } }
+            public bool CiFlg { get; set; }
 			public bool NightFlg { get; set; }
 
 			public Unit(Action act_) { act = act_; }
@@ -268,7 +276,7 @@ namespace CarrierSlideRuler.ViewModels {
 							var kammusu = Database.GetKammusuData(UnitList[x].Name);
 							for (int y = 0; y < Y; ++y)
 							{
-								var fixedFlg = new bool[] { UnitList[x].PCheck1, UnitList[x].PCheck2, UnitList[x].PCheck3, UnitList[x].PCheck4 };
+								var fixedFlg = new bool[] { UnitList[x].PCheck1, UnitList[x].PCheck2, UnitList[x].PCheck3, UnitList[x].PCheck4, UnitList[x].PCheck5 };
 								for (int z = 0; z < Z; ++z)
 								{
 									var weapon = Database.GetWeaponData(weaponList[z]);
@@ -799,7 +807,7 @@ namespace CarrierSlideRuler.ViewModels {
 					#endregion
 					//string hoge = problem.ToLpString();
 					// 最適化を実行
-					var timeLimit = new int[] { 10, 30, 60, 600, 3600, 86400, 86400 * 21 };
+					int[] timeLimit = new int[] { 10, 30, 60, 600, 3600, 86400, 86400 * 21 };
 					var result = await Task.Run(() => problem.BranchAndCut(false, timeLimit[TimeLimitType]));
 					// 結果を読み取る
 					if (result == SolverResult.OK || result == SolverResult.ErrorTimeLimit)
@@ -851,7 +859,9 @@ namespace CarrierSlideRuler.ViewModels {
 							++p;
 							UnitList[x].PName4 = answer[p];
 							++p;
-						}
+                            UnitList[x].PName5 = answer[p];
+                            ++p;
+                        }
 						// その状態でSt1撃墜をテストし、問題ないかを判断する
 						//制空に参加するスロットの一覧表を出す(制空値・搭載数)
 						var slotList = new List<KeyValuePair<WeaponData, int>>();

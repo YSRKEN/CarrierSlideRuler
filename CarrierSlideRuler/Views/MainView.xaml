@@ -4,7 +4,7 @@
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:local="clr-namespace:CarrierSlideRuler.Views"
-		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="1000" MaxHeight="400" MinWidth="1000" ResizeMode="CanResize" Topmost="True">
+		mc:Ignorable="d" Title="{Binding Title}" Height="400" Width="1200" MaxHeight="400" MinWidth="1000" ResizeMode="CanResize" Topmost="True">
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition  />
@@ -103,7 +103,28 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="CI" Width="35">
+                <DataGridTemplateColumn Header="装備5" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding PSelectList5}" SelectedItem="{Binding PName5, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg5}" Height="30" FontSize="15" VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="搭載" Width="35">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding PSlotSize5}" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="固定" Width="35">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding PCheck5, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding PFlg5}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="CI" Width="35">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding CiFlg, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Center" />

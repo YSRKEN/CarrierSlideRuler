@@ -23,7 +23,7 @@ namespace CarrierSlideRuler.Models {
 					// 1行を読み込む
 					string line = sr.ReadLine();
 					// マッチさせてから各数値を取り出す
-					string pattern = @"^(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<SlotCount>\d+),(?<Airs1>\d+),(?<Airs2>\d+),(?<Airs3>\d+),(?<Airs4>\d+),(?<HasPF>○|×),(?<HasPA>○|×),(?<HasPB>○|×),(?<HasJPB>○|×),(?<HasWF>○|×),(?<HasWB>○|×),(?<HasPS>○|×),(?<HasPSK>○|×),(?<HasAS>○|×)";
+					string pattern = @"^(?<Number>\d+),(?<Name>[^,]+),(?<Type>[^,]+),(?<Attack>\d+),(?<SlotCount>\d+),(?<Airs1>\d+),(?<Airs2>\d+),(?<Airs3>\d+),(?<Airs4>\d+),(?<Airs5>\d+),(?<HasPF>○|×),(?<HasPA>○|×),(?<HasPB>○|×),(?<HasJPB>○|×),(?<HasWF>○|×),(?<HasWB>○|×),(?<HasPS>○|×),(?<HasPSK>○|×),(?<HasAS>○|×)";
 					var match = Regex.Match(line, pattern);
 					if (!match.Success) {
 						continue;
@@ -40,7 +40,8 @@ namespace CarrierSlideRuler.Models {
 							int airs2 = int.Parse(match.Groups["Airs2"].Value);
 							int airs3 = int.Parse(match.Groups["Airs3"].Value);
 							int airs4 = int.Parse(match.Groups["Airs4"].Value);
-							bool hasPF = (match.Groups["HasPF"].Value == "○");
+                            int airs5 = int.Parse(match.Groups["Airs5"].Value);
+                            bool hasPF = (match.Groups["HasPF"].Value == "○");
 							bool hasPA = (match.Groups["HasPA"].Value == "○");
 							bool hasPB = (match.Groups["HasPB"].Value == "○");
 							bool hasJPB = (match.Groups["HasJPB"].Value == "○");
@@ -49,7 +50,7 @@ namespace CarrierSlideRuler.Models {
 							bool hasPS = (match.Groups["HasPS"].Value == "○");
 							bool hasPSK = (match.Groups["HasPSK"].Value == "○");
 							bool hasAS = (match.Groups["HasAS"].Value == "○");
-							var kammusu = new KammusuData(id, name, type, attack, slotCount, new int[] { airs1, airs2, airs3, airs4 },
+							var kammusu = new KammusuData(id, name, type, attack, slotCount, new int[] { airs1, airs2, airs3, airs4, airs5 },
 								hasPF, hasPA, hasPB, hasJPB, hasWF, hasWB, hasPS, hasPSK, hasAS);
 							kammusuDictionary[name] = kammusu;
 						}
@@ -284,7 +285,7 @@ namespace CarrierSlideRuler.Models {
 			Type = FleetType.None;
 			Attack = 0;
 			SlotCount = 0;
-			Airs = new int[] { 0, 0, 0, 0 };
+			Airs = new int[] { 0, 0, 0, 0, 0 };
 			HasPF = false;
 			HasPA = false;
 			HasPB = false;
