@@ -834,12 +834,15 @@ namespace CarrierSlideRuler.ViewModels {
 						}
 						for (int x = 0; x < X; ++x)
 						{
-							message += $"{UnitList[x].Name}→";
-							for (int y = 0; y < Y; ++y)
-							{
-								message += $"{answer[x * Y + y]},";
-							}
-							message += "\n";
+                            if (UnitList[x].Name != "なし")
+                            {
+                                message += $"{UnitList[x].Name}→";
+                                for (int y = 0; y < Y; ++y)
+                                {
+                                    message += $"{answer[x * Y + y]},";
+                                }
+                                message += "\n";
+                            }
 						}
 						// 通知
 						if (result == SolverResult.ErrorTimeLimit)
