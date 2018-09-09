@@ -21,7 +21,7 @@ namespace CarrierSlideRuler.Models {
 	// その他定数
 	static class Constant {
 		// メイン画面上の艦数と装備数
-		public static readonly int MaxKammusuCount = 6;
+		public static readonly int MaxKammusuCount = 12;
 		public static readonly int MaxWeaponCount = 5;
 		// 艦種データと文字列との対応ハッシュ
 		public static FleetTypeTable fleetTypeTable = new FleetTypeTable() {
