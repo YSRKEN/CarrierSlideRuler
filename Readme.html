@@ -11,7 +11,7 @@
 <style id="previewerStyle"></style>
 <title>CarrierSlideRuler(艦載計算尺)</title>
 <style></style></head>
-<body class="previewMode initialState"><div id="touchvpn_icon_container" class="disconnected" draggable="true"><div id="touchvpn_status_icon" class="touchvpn_sg"><div class="touchvpn_icon_sign">Best choice for browsing</div></div><div id="touchvpn_icon_selector"><div class="touchvpn_country touchvpn_nl"><div class="touchvpn_icon_sign">Browse from Netherlands</div></div><div class="touchvpn_country touchvpn_ru"><div class="touchvpn_icon_sign">Browse from Russian Federation</div></div><div class="touchvpn_country touchvpn_fr"><div class="touchvpn_icon_sign">Browse from France</div></div><div class="touchvpn_country touchvpn_sg"><div class="touchvpn_icon_sign">Browse from Singapore</div></div></div></div>
+<body class="previewMode initialState">
 <nav>
 	<div id="leftNav">
 		<button id="onlineMenuButton">オンラインメニュー</button><button id="settingMenuButton">設定</button>
@@ -61,6 +61,7 @@ GPLv3
 
 ## バージョン履歴
 
+- Ver.1.2.0(2018/09/09) …… 新艦・新装備を追加。また、5スロ対応・12隻まで対応とした
 - Ver.1.1.0(2018/03/11) …… 制空最適化アルゴリズムを大幅に変更した
 - Ver.1.0.3(2017/10/10) …… 空母カットインや空母夜戦攻撃の有無をチェックボックスで選択可能にした
 - Ver.1.0.2(2017/08/20) …… UIを改良、搭載数を表示するようにした、より適した配置を算出できるよう改良
@@ -69,7 +70,7 @@ GPLv3
 
 ## 使い方
 
-![HowToUse](https://user-images.githubusercontent.com/3734392/37251792-d69b811c-2559-11e8-8d49-ae175461738a.png)
+![HowToUse](https://user-images.githubusercontent.com/3734392/45264195-a35fbf80-b473-11e8-99a2-58f0102e015d.png)
 
 - 制空計算したい場合は、コンボボックスで艦名と装備名を選択してください
 - 装備を自動で最適化させたい場合は、「最適化」ボタンをクリックしてください。   
@@ -87,12 +88,13 @@ GPLv3
 - 「敵制空値」グループボックスは、道中含めた敵マス全体の制空値、およびそのマスで取りたい制空状況を入力します
   - 狙いたい制空状態は、制空権確保～航空劣勢まで可能です
   - 「追加」ボタンで追加、「削除」ボタンで削除します。選択項目を上下に動かす機能はありません
+  - 例えば「100-確保」「200-優勢」と入力した場合、1マス目・2マス目の敵制空値はそれぞれ100と200で、自分はそれぞれに対し制空権確保・航空優勢を取りたいということです
 
 ![HowToUse2](https://user-images.githubusercontent.com/3734392/37251901-b41b09bc-255b-11e8-8e45-c01c42264856.png)
 
 - 上記のように、満足するまで最適化を何度も行うことにより、St1撃墜まで考慮した艦載機配置を行うことができます
 - オプションで制空を「+1％」などと割り増した場合、最終的な制空値が「+0％」の時よりその分大きくなります
-  - ③の時点で割り増しているのですが、「+1％」などの指定はその上から更に盛る格好になります
+  - ③の時点で割り増しているのですが、「+1％」などの指定はその上から更に盛る格好になります。敵の対空砲火が怖い時などにお使い下さい
 
 ## weapon.csvについて
 
@@ -107,8 +109,9 @@ GPLv3
 ![kammusu.csv](https://user-images.githubusercontent.com/3734392/29223993-7ee6a2f0-7f03-11e7-99ee-401b0cc54aef.png)
 - BOMなしUTF-8、CR+LFのテキストファイルです
 - 「ID」とは、図鑑番号のこと……ではありませんが出鱈目な数字でもありません。 **お察しください**
+  - まあテキトーでもプログラム上は問題ないはずですが
 - 「艦戦？」「艦攻？」などは、その種類の装備が載るか否かを表しています
-- 「0,なし,その他,0,0,0,0,0,0,×,×,×,×,×,×,×,×,×」と書かれている行は、 **必ず一番後ろの行になるようにしてください**
+- 「0,なし,その他,0,0,0,0,0,0,0,×,×,×,×,×,×,×,×,×」と書かれている行は、 **必ず一番後ろの行になるようにしてください**
 
 ## have_weapon.csvについて
 ![have_weapon.csv](https://user-images.githubusercontent.com/3734392/29224090-cabf1766-7f03-11e7-8de5-4559268cc5ac.png)
@@ -531,18 +534,18 @@ pre tt {
 </textarea>
 		</div>
 		<ol id="editorTabs">
-			<li class="selected"><a href="#" id="markdownTab">Markdown</a></li>
-			<li><a href="#" id="cssTab">CSS</a></li>
+			<li class="selected"><a href="#" id="markdownTab" _pageexpand_="20">Markdown</a></li>
+			<li><a href="#" id="cssTab" _pageexpand_="24">CSS</a></li>
 		</ol>
 	</div>
 	<div id="previewer" tabindex="-1"></div>
 </div>
 <div id="onlineMenu" class="popupMenu">
 	<ul>
-		<li><a href="http://tatesuke.github.io/KanTanMarkdown/ktm.html" target="_blank">新規作成</a></li>
-		<li><a href="http://tatesuke.github.io/KanTanMarkdown/syntax.html" id="helpButton" target="_blank">Markdown記法ヘルプ(F1)</a></li>
-		<li><a href="#" id="updateButton">最新版にアップデート(機能実験中)</a></li>
-		<li><a href="http://tatesuke.github.io/KanTanMarkdown/" target="_blank">かんたんMarkdown <span class="version">v1.20160412.01_lite</span></a></li>
+		<li><a href="http://tatesuke.github.io/KanTanMarkdown/ktm.html" target="_blank" _pageexpand_="4">新規作成</a></li>
+		<li><a href="http://tatesuke.github.io/KanTanMarkdown/syntax.html" id="helpButton" target="_blank" _pageexpand_="8">Markdown記法ヘルプ(F1)</a></li>
+		<li><a href="#" id="updateButton" _pageexpand_="12">最新版にアップデート(機能実験中)</a></li>
+		<li><a href="http://tatesuke.github.io/KanTanMarkdown/" target="_blank" _pageexpand_="16">かんたんMarkdown <span class="version">v1.20160412.01_lite</span></a></li>
 	</ul>
 </div>
 <div id="settingMenu" class="popupMenu">
